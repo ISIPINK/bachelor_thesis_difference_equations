@@ -1,0 +1,1879 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[dutch]{babel}
+\usepackage{amsthm}
+\usepackage{csquotes}
+\usepackage[
+backend=biber,
+style=alphabetic,
+]{biblatex}
+
+
+\setlength{\textwidth}{15.0cm}
+\setlength{\textheight}{24.0cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headsep}{0cm}
+\setlength{\headheight}{0cm}
+\pagestyle{plain}
+\usepackage[dvips]{epsfig}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+
+
+\addbibresource{differentievergelijkingen.bib} 
+
+\setlength{\parindent}{0pt}
+
+\input{preamble_enviorments.tex}
+
+
+\title{Differentievergelijkingen}
+\author{Isidoor Pinillo Esquivel}
+
+\begin{document}
+
+\input{titelblad.tex}
+
+\begin{abstract}
+    In deze paper introduceren we lineaire differentievergelijkingen en lineaire operatoren.
+    Verder geven we vormen van de algemene oplossing van lineaire differentievergelijkingen door
+    companion operatoren (companion matrix) en operatorfactorisatie te gebruiken.
+\end{abstract}
+
+
+\section{Basisbegrippen en notatie}
+In deze sectie worden enkele basisbegrippen en algemene notaties ingevoerd. Ter verduidelijking worden er ook een aantal bijhorende voorbeelden gegeven.
+
+
+% monoïde had ik nodig voor het stuk van lineair onafhankelijkheid
+\begin{notation}
+    Vanaf nu zal altijd
+    \begin{itemize}
+        \item  $K$ een willekeurige verzameling zijn.
+        \item  $M$ een monoïde zijn.
+              % \item  $M^*$ alle inverteerbare elementen van $M$ zijn.
+        \item  $Z(M)$ het centrum van $M$ zijn.
+        \item  $G$ een groep zijn.
+        \item  $A$ een commutatieve/abelse groep zijn.
+        \item  $F$ een lichaam zijn.
+        \item  $\text{Fun}(K,K) := \{f:K \rightarrow K | f \text{ is een functie van K naar K}\}$.
+        \item  $\text{End}(G) := \{f \in \text{Fun}(G,G)| \forall x,y \in G: f(x+y)=f(x)+f(y) \}$.
+        \item  $\text{Aut}(G) := \{f \in\text{End}(G)| f \text{ inverteerbaar} \}$.
+    \end{itemize}
+\end{notation}
+
+\subsection{Rijen en differentievergelijkingen}
+Rijen en differentievergelijkingen zullen overal opduiken in deze paper en zijn een eenvoudig beginpunt.
+\begin{definition}[rij]
+    Een rij is een afbeelding uit $\mathbb{Z}$.
+\end{definition}
+
+\begin{remark}
+    We hadden rijen ook kunnen definiëren als enkel een afbeelding uit $\mathbb{N}$. Meeste resultaten in deze
+    paper zullen ook een versie met deze alternatieve definitie hebben.
+    % en is gelaten als een oefening voor de lezer
+\end{remark}
+
+% ik heb gekozen om rijen uit Z want anders kom ik later in de problemen met het definiëren van operatoren,
+% ik ben daar op een harde manier achter gekomen :P
+\begin{notation}[rij]
+    Noteer alle rijen naar $K$ als $(K)_{\mathbb{Z}}$ en
+    een rij als $(f_i) \in (K)_{\mathbb{Z}}$ waar bijna overal $i \in \mathbb{Z}$ impliciet zal zijn.
+\end{notation}
+
+
+
+\begin{example}[rij van Fibonacci] %WP Het is Fibonacci, niet Fibonacchi (gefixt)
+    Een bekende rij van getallen is die van Fibonacci ($f_i$). Deze rij wordt gedefinieerd aan de hand
+    van zijn eerste twee elementen, $f_0$ en $f_1$, respectievelijk gelijk aan 0 en 1, waarna elk volgend element gelijk
+    is aan de som van de twee voorgaande, en elk vorig element gelijk is aan het verschil. Of formeel:
+    $$
+        f_0 = 0, f_1 = 1, f_{n+2} = f_{n+1}+f_{n}, \forall n \in \mathbb{Z}.
+    $$
+
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|} \hline
+            ... & $f_{-2}$ & $f_{-1}$ & $f_0$ & $f_1$ & $f_2$ & $f_3$ & $f_4$ & $f_5$ & $f_6$ & ... \\ \hline
+            ... & $-1$     & $1$      & $0$   & $1$   & $1$   & $2$   & $3$   & $5$   & $8$   & ... \\ \hline
+        \end{tabular}
+    \end{table}
+\end{example}
+
+De Fibonacci rij uit vorig voorbeeld wordt geconstrueerd door een relatie in de rij. Een type van
+relaties in getalrijen zijn differentievergelijkingen.
+
+\begin{definition}[differentievergelijking]
+    Een differentievergelijking $\phi$ van orde $k \in \mathbb{N}$ is een rij van relaties binnen een andere rij $(f_i)$
+    van volgende vorm:
+    $$
+        \phi_n((f_j)_{j = n}^{n+k}) = 0, \forall n \in \mathbb{Z}  \text{ met } \phi_i:K^{k+1} \rightarrow K.
+    $$
+\end{definition}
+
+\begin{remark}
+    Aangezien voorgaande definitie geen expliciete differentie bevat, wat later aan bod zal komen
+    (zie (\ref{defdiff})), wordt hiernaar ook wel verwezen als recursierelatie.
+\end{remark}
+
+\begin{example}[Fibonacci]
+    De rij van Fibonacci $(f_i)$ voldoet aan
+    $$
+        \phi_n((f_j)_{j = n}^{n+k}) = 0, \forall n \in \mathbb{Z} \text{ met } \phi_i:\mathbb{R}^{3} \rightarrow \mathbb{R}:(f_n,f_{n+1},f_{n+2}) \rightarrow f_{n+2}-f_{n+1}-f_n
+    $$
+    Wat equivalent is met
+    $$
+        f_{n+2} = f_{n+1}+f_{n}, \forall n \in \mathbb{Z}.
+    $$
+
+
+\end{example}
+
+\begin{definition}[oplossing van een differentievergelijking]
+    $(f_i) \in (K)_{\mathbb{Z}}$ is een oplossing van een differentievergelijking $\phi$
+    als en slechts als $(f_i)$ aan $\phi$ voldoet.
+\end{definition}
+
+
+%WP: reëel getal, niet reël (gefixt)
+
+\subsection{Operatoren}
+Operatoren zullen de notatie significant verbeteren en de grond leggen voor elegantere bewijzen. De naam
+''differentievergelijkingen'' komt van differentie operator.
+
+% \cite{boole2008calculus}  wordt dit ook besproken
+
+\begin{notation}
+    \label{notoperatoren}
+    Om notatie te vereenvoudigen zal vanaf nu
+    \begin{itemize}
+        \item de index $i$ impliceert een rij.
+        \item ronde haakjes duiden aan dat een operator op een rij inwerkt, anders is er sprake van compositie.
+        \item constante rijen zullen duidelijk zijn uit hun context, meestal door een ontbrekende index $i$.
+        \item bewerkingen tussen rijen gebeuren elementwijs (ook compositie).
+        \item functies werken elementwijs op rijen.
+        \item matrixoperatorenvermenigvuldiging werken via normale matrixvermenigvuldiging.
+    \end{itemize}
+
+\end{notation}
+
+%ik ga achter af alle operatoren die ik ni nodig in comments zetten of steek ik die in een bijlage
+\begin{definition}[$E , \Delta , |_k$]
+    \label{defdiff}
+    % L is de lagg operator, E is de shift operator, $\Delta$ en $\nabla$ zijn differentieoperatoren en $|_k$ is evaluatie in $k$ operator.
+    E is de shift operator, $\Delta$ is de differentieoperator en $|_k$ is de ''evaluatie in $k$'' operator.
+    \begin{align*}
+        % L      & :(K)_{\mathbb{Z}} \rightarrow (K)_{\mathbb{Z}} : (f_i) \rightarrow (f_{i-1})                                                             \\
+        E      & :(K)_{\mathbb{Z}} \rightarrow (K)_{\mathbb{Z}} : (f_i) \rightarrow (f_{i+1})       \\
+        \Delta & :(G)_{\mathbb{Z}} \rightarrow (G)_{\mathbb{Z}} : (f_i) \rightarrow (f_{i+1}-f_{i}) \\
+        % \nabla & :(G)_{\mathbb{Z}} \rightarrow (G)_{\mathbb{Z}} : (f_i) \rightarrow (f_{i}-f_{i-1})                                                       \\
+        |_k    & :(K)_{\mathbb{Z}} \rightarrow (K)_{\mathbb{Z}} : (f_i) \rightarrow (f_k)
+    \end{align*}
+\end{definition}
+
+
+\begin{lemma}
+    $E ,  |_k$ bewaren de elementwijze optelling in $(G)_{\mathbb{Z}}$.
+\end{lemma}
+
+\begin{proof}
+    Verificatie.
+\end{proof}
+
+\begin{definition}[bijna ring]
+    Een bijna ring is een ring dat aan minder axioma's voldoet. $R$ is een bijna ring als en slechts als
+    \begin{itemize}
+        \item R een groep is voor de optelling.
+        \item de multiplicatie op R associatief is.
+        \item de multiplicatie links en rechts distributief is in R.
+    \end{itemize}
+\end{definition}
+
+\begin{theorem}
+    Alle operatoren die de elementwijze optelling in $(G)_{\mathbb{Z}}$ bewaren, vormen een bijna ring
+    met compositie als vermenigvuldiging en de uitgebreide optelling naar operatoren.
+\end{theorem}
+
+\begin{proof}
+    Verificatie. % of wikipedia  https://en.wikipedia.org/wiki/Near-ring
+\end{proof}
+
+\begin{corollary}
+    $\forall A,B,C \in End((G)_{\mathbb{Z}}): A(B+C)=AB + AC$.
+\end{corollary}
+
+\begin{remark}
+    Rechtse distributie is een gevolg van hoe de uitgebreide optelling naar operatoren gedefinieerd is.
+\end{remark}
+
+
+\begin{remark}
+    $\Delta$ bewaart alleen de de elementwijze optelling in $(G)_{\mathbb{Z}}$ als deze commutatief is.
+    In principe is dit geen probleem want $\Delta = E-1$.
+\end{remark}
+
+\begin{lemma}
+    $\forall n \in \mathbb{Z}:|_n E = |_{n+1}$ en $ \Delta = E-1$.
+\end{lemma}
+
+\begin{proof}
+    Verificatie. Uitgeschreven: $\forall f_i \in (G)_{\mathbb{Z}}:$
+    \begin{align*}
+        (|_n E)(f_i) & = (|_n)(f_{i+1}) \\
+                     & = f_{n+1}        \\
+                     & = (|_{n+1})(f_i)
+    \end{align*}
+
+    \begin{align*}
+        (\Delta)(f_i) & = f_{i+1} -f_i \\
+                      & = (E-1)(f_i)
+    \end{align*}
+\end{proof}
+
+\begin{corollary}
+    $\forall n \in \mathbb{Z}:|_n \Delta = |_{n+1} - |_n.$
+\end{corollary}
+
+\begin{proof}
+    Verificatie. Uitgeschreven: $ |_n \Delta = |_n (E-1) = |_n E - |_n = |_{n+1} - |_n.$
+\end{proof}
+
+
+\begin{theorem}
+    $\forall g_i \in (\text{Fun}(K,K))_{\mathbb{Z}}: Eg_i = g_{i+1}E.$
+\end{theorem}
+\begin{proof}
+    $\forall f_i \in (K)_{\mathbb{Z}}: E(g_i(f_i)) = g_{i+1}(f_{i+1}) = g_{i+1}(E(f_i)).$
+\end{proof}
+
+\begin{corollary}\label{constante functie rijen commuteren met E}
+    Dit betekent ook dat constante functie rijen commuteren met $E$.
+\end{corollary}
+
+
+\begin{notation}
+    In het geval dat $g_i:M \rightarrow M : m \rightarrow a_i*m$ dan schrijven we gewoon
+    $$
+        Ea_i = a_{i+1}E
+    $$
+    dan is de compositie van $a_i$ de elementwijze vermenigvuldiging met $a_i$.
+\end{notation}
+
+
+\begin{definition}[$\Delta^{-1}$]
+    $\Delta^{-1}$ is de inverse differentieoperator en wordt gedefinieerd door de volgende eigenschap
+    $$
+        \Delta^{-1} \Delta = 1 -|_0.
+    $$
+\end{definition}
+
+\begin{theorem}[goed gedefinieerdheid van $\Delta^{-1}$]
+    $\Delta^{-1}$ is goed gedefinieerd en
+    \begin{align*}
+        \Delta^{-1} : & (G)_{\mathbb{Z}} \rightarrow (G)_{\mathbb{Z}}: (f_n) \rightarrow                              \\
+                      & \left\{\begin{aligned}
+                                    & \sum_{j=0}^{n-1}{f_{j}} & = & f_{n-1}+f_{n-2}+...+f_1 +f_0     & \text{ als } n > 0 \\
+                                    & 0                       &   &                                  & \text{ als } n = 0 \\
+                                    & -\sum_{j=n}^{-1}{f_{j}} & = & -f_{n}-f_{n+1}-...-f_{-2}-f_{-1} & \text{ als } n < 0
+                               \end{aligned} \right. .
+    \end{align*}
+\end{theorem}
+
+\begin{proof}
+    Verificatie en uniciteit volgt uit (\ref{uniciteitvoorwaarde}).
+    Uitgeschreven is dit $\forall f_i \in (G)_{\mathbb{Z}}:$
+    \begin{align*}
+        (1 -|_0) (f_i)                             & =(\Delta^{-1} \Delta)(f_i) \Leftrightarrow      \\
+        f_i - f_0                                  & = (\Delta^{-1})(f_{i+1} - f_i ) \Leftrightarrow \\
+        \forall n \in \mathbb{Z}: (|_n)(f_i - f_0) & = (|_n)(\Delta^{-1})(f_{i+1} - f_i )
+    \end{align*}
+    In overeenstemming met de uiteenvallende definitie van van $\Delta^{-1}$ als functie van $n$, krijgen we hier elementgewijs:\\
+    Voor $\forall n>0:$
+    \begin{align*}
+        f_n - f_0 & =\sum_{j=0}^{n-1}{(f_{j+1} - f_j)}                              \\
+                  & = f_{n} -f_{n-1}+f_{n-1}-f_{n-2}+...+f_{2} -f_{1}+ f_{1} -f_{0} \\
+                  & = f_n - f_0.
+    \end{align*}
+    Voor $n=0:$
+    $$ f_0 - f_0 = 0.$$
+    Voor $\forall n<0:$
+    \begin{align*}
+        f_n - f_0 & =-\sum_{j=n}^{-1}{(f_{j+1} - f_j)}                          \\
+                  & = -(f_0 - f_{-1} + f_{-1} - f_{-2} + ... + f_{n+1} - f_{n}) \\
+                  & = -(f_0 - f_{n})                                            \\
+                  & = f_n - f_0.
+    \end{align*}
+\end{proof}
+
+
+
+\begin{lemma}
+    $
+        \Delta \Delta^{-1} = 1.
+    $
+\end{lemma}
+
+\begin{proof}
+    Verificatie. Uitgeschreven :
+    \begin{align*}
+        1                             & =  \Delta \Delta^{-1} \Leftrightarrow         \\
+        \forall n \in \mathbb{Z}: |_n & = |_n \Delta \Delta^{-1}\Leftrightarrow       \\
+        \forall n \in \mathbb{Z}: |_n & = (|_{n+1} - |_n) \Delta^{-1} \Leftrightarrow \\
+        \forall n \in \mathbb{Z}: |_n & = |_{n+1}\Delta^{-1}  - |_n\Delta^{-1}
+    \end{align*}
+    $\forall f_i \in (G)_{\mathbb{Z}}:$\\
+    Voor $\forall n>0:$
+    \begin{align*}
+        f_n & = (|_{n+1}\Delta^{-1}  - |_n\Delta^{-1}  )(f_i)            \\
+            & =  f_{n}+f_{n-1}+...+f_1 +f_0  - f_0 - f_1 - ... - f_{n-1} \\
+            & = f_n.
+    \end{align*}
+    Voor $n=0:$
+    \begin{align*}
+        f_0 & = (|_{1}\Delta^{-1}  - |_0\Delta^{-1}  )(f_i) \\
+            & =  f_0 - 0                                    \\
+            & = f_0.
+    \end{align*}
+    Voor $n=-1:$
+    \begin{align*}
+        f_{-1} & = (|_{0}\Delta^{-1}  - |_{-1}\Delta^{-1}  )(f_i) \\
+               & =  0 - (-f_{-1})                                 \\
+               & =  f_{-1}.
+    \end{align*}
+    Voor $\forall n<-1:$
+    \begin{align*}
+        f_n & = (|_{n+1}\Delta^{-1}  - |_n\Delta^{-1}  )(f_i)                                        \\
+            & = -f_{n+1}-f_{n+2}-...-f_{-2}-f_{-1} + f_{-1} + f_{-2} + ... + f_{n+2} + f_{n+1} + f_n \\
+            & = f_n.
+    \end{align*}
+
+\end{proof}
+
+
+%WP Bedoel je met die laatste operator dat de rij constant f_k wordt? Hier bij deze definitie een voorbeeldje geven zou een hoop verduidelijken.
+%Verder zou ik ook vanaf het moment dat er een som of verschil staat, je haken groter maken met \left en \right, en ik zou niet \Sigma en \Pi gebruiken, 
+%maar \sum en \prod, al dan niet voorafgegaan door \displaystyle
+
+%isi: f_k is constant die \sum en \prod maakt alles mega groot dus ik heb dat opgesplitsts in 2 defs en nu ziet
+% dat er beter uit
+
+
+\begin{example}[operatoren en Fibonacci]
+    Met voorgaande operatoren kunnen we nu, met identieke beginvoorwaarden, de genererende differentievergelijking voor de rij van Fibonacci herschrijven in termen van $E$:
+    $$
+        (E^2 -E -1)(f_i) =0.
+    $$
+    Dit kan ook met $\Delta$:
+    \begin{align*}
+        ((\Delta +1)^2 - (\Delta +1) +1)(f_i) & =0  \\
+        (\Delta^2 + \Delta + 1)(f_i)          & =0.
+    \end{align*}
+    In volgende tafel staan een paar voorbeelden van operatoren werkende op de rij van Fibonacci:
+
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|c||r|r|r|r|r|r|r|r|r|r|r|} \hline
+            $i$                & ... & $-2$ & $-1$ & $0$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$  & ... \\ \hline \hline
+            $f_i$              & ... & $-1$ & $1$  & $0$ & $1$ & $1$ & $2$ & $3$ & $5$ & $8$  & ... \\ \hline
+            $E(f_i)$           & ... & $1$  & $0$  & $1$ & $1$ & $2$ & $3$ & $5$ & $8$ & $13$ & ... \\ \hline
+            $\Delta(f_i)$      & ... & $2$  & $-1$ & $1$ & $0$ & $1$ & $1$ & $2$ & $3$ & $5$  & ... \\ \hline
+            $(f_i)|_1$         & ... & $1$  & $1$  & $1$ & $1$ & $1$ & $1$ & $1$ & $1$ & $1$  & ... \\ \hline
+            $\Delta^{-1}(f_i)$ & ... & $0$  & $-1$ & $0$ & $0$ & $1$ & $2$ & $4$ & $7$ & $12$ & ... \\ \hline
+        \end{tabular}
+    \end{table}
+\end{example}
+
+
+
+
+% hier zeg ik niet wat a_i en f_i zijn ... maar dit is puur om notatie te demonstreren
+\begin{example}[haakjes en operatoren]
+    Volgend op (\ref{notoperatoren}) letten we op volgende mogelijke misvattingen:
+    \begin{align*}
+        E a_i                                       & \neq E(a_i) \Leftrightarrow                 \\
+        E(a_i f_i) = a_{i+1}f_{i+1}                 & \neq a_{i+1} f_i = E(a_i) f_i.              \\
+        % WP Deze notatie maakt de zaak alvast niet duidelijker. Volgens je eerdere definitie werkt E op een element van (\mathbb{R})_(\mathbb{Z}), 
+        % dus weet ik niet goed wat je met E a_i bedoelt. Definieer ook a_i!
+        %
+        % In vorig voorbeeld is de eerste vergelijking een operator ongelijkheid met het LL vermenigvuldig met $a_i$ en dan een shift
+        % en in het RL een vermenigvuldig met de shift van $a_i$. Om te checken dat operatoren gelijk zijn moeten ze op dezelfde manier % WP: opdezelde? (hopelijk gefixt)
+        % werken op alle rijen wat duidelijk niet zo is in dit geval. Dit is hetzelfde voorbeeld maar dan met de differentieoperator:
+        \Delta a_i                                  & \neq \Delta(a_i) \Leftrightarrow            \\
+        \Delta(a_i f_i) = a_{i+1} f_{i+1} - a_i f_i & \neq a_{i+1} f_i - a_i f_i=\Delta(a_i) f_i.
+    \end{align*}
+
+
+\end{example}
+
+\begin{example}[constante uit context]
+    Analoog aan voorgaande voorbeeld, en gelet op de notatie van een constante rij, mag $E(f_i) = f_{i+1}$ niet te verwarren zijn met:
+    \begin{align*}
+        E(f_0) & = f_0     \\
+               & \neq f_1.
+    \end{align*}
+
+    Aangezien de shift operator inwerkt op $(K)_\mathbb{(Z)}$ en niet op $\mathbb{Z}$, kan $f_0$ enkel wijzen op een constante rij $(f_0)_{i \in \mathbb{Z}}$.
+\end{example}
+
+\begin{example}[matrixoperatoren]
+    We starten met een eenvoudig voorbeeld:
+    \[
+        \left[ {
+                    \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]
+        (f_i) =
+        \left[ {
+                    \begin{array}{c}
+                        E(f_i) \\
+                        1(f_i)
+                    \end{array} } \right]
+        =
+        \left[ {
+                    \begin{array}{c}
+                        f_{i+1} \\
+                        f_i
+                    \end{array} } \right].
+    \]
+    Vervolgens hetzelfde voorbeeld maar dan met een matrixrij:
+    \[
+        \left[ {
+                    \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]
+        \left(\left[ {
+            \begin{array}{cc}
+                g_i & h_i
+            \end{array} } \right]\right) =
+        \left[ {
+                    \begin{array}{r}
+                        E \left(\left[ {
+                        \begin{array}{cc}
+                                g_i & h_i
+                            \end{array} } \right]\right) \\
+                        1\left(\left[ {
+                            \begin{array}{cc}
+                                g_i & h_i
+                            \end{array} } \right]\right)
+                    \end{array} } \right]
+        =
+        \left[ {
+                    \begin{array}{c}
+                        \left[ {
+                        \begin{array}{cc}
+                                        g_{i+1} & h_{i+1}
+                                    \end{array} } \right] \\
+                        \left[ {
+                                    \begin{array}{cc}
+                                        g_i & h_i
+                                    \end{array} } \right]
+                    \end{array} } \right].
+    \]
+    Verder hetzelfde voorbeeld zonder haakjes:
+    \[
+        \left[ {
+                    \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]
+        \left[ {
+                    \begin{array}{cc}
+                        g_i & h_i
+                    \end{array} } \right] = Eg_i + h_i = g_{i+1}E + h_i.
+    \]
+    Verder hetzelfde voorbeeld waar de volgorde van de vermenigvuldiging gewisseld is:
+    \[
+        \left[ {
+                    \begin{array}{cc}
+                        g_i & h_i
+                    \end{array} } \right]
+        \left[ {
+                    \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]
+        = g_iE + h_i.
+    \]
+
+\end{example}
+
+% uit een oude versie
+% % hier kan ik ook diegene weghalen die ik niet nodig heb of mss steek ik dat in een bijlage
+% \begin{lemma}[relaties operatoren]
+%     Tussen de operatoren zelf bestaan er relaties die te checken zijn.
+%     \begin{align*}
+%         1             & = LE = EL                   \\
+%         0             & = \Delta |_k = \nabla |_k   \\
+%         \Delta        & = E -1 = E\nabla = \nabla E \\
+%         \nabla        & = 1 -L = L\Delta= \Delta L  \\
+%         \Delta \Sigma & =1                          \\
+%         \Sigma \Delta & = 1 - |_{0}                 \\
+%         |_{k+1}       & = |_k E                     \\
+%         |_{k}         & = E |_k  = |_{l} |_k        \\
+%         E a_i         & = a_{i+1} E
+%     \end{align*}
+%     meer relaties zijn te vinden door inductie, binomium van Newton of combinaties te maken.
+% \end{lemma}
+
+
+
+
+
+% De theorie voor differentievergelijkingen loopt voor een groot stuk parallel met die van differentiaalvergelijkingen. Men kan bv
+% ODE's oplossen met differentievergelijkingen door deze te discretiseren en dan de limiet te nemen. Dit is te doen door onderligende rijen $(x_i)$ te kiezen,
+% waar $\Delta(x_i) \rightarrow 0$. Vervang dan in de diffrentiaalvergelijking $x$ met $(x_i)$, $f$ met $(f_i) \approx (f(x_i))$ %WP differentiaalvergelijking; "waar dat" is geen correct Nederlands, die "dat" moet weg. (gefixt)
+% en alle $\frac{d}{dx}$ door $\frac{\Delta}{\Delta (x_i)}$. Los dit voor alle onderliggende rijen op en neem de limiet van de oplossing. 
+% %WP met moet door zijn! Tevens is het me niet duidelijk wat je bedoelt met een rij gedeeld door een andere rij!
+% %isi: ik heb nu elementwijze bewerkingen tussen rijen.
+
+% \begin{example}
+%     Neem
+%     $$
+%         \frac{df}{dx} = f
+%     $$
+%     Kies dan onderliggende rijen  $x_i = ti$ met $t \in \mathbb{R}$. Dit geeft %WP onderliggende (gefixt)
+%     $$
+%         \frac{f_{i+1} - f_{i}}{t} = f_i \Leftrightarrow f_{i} =  (1 + t)^i f_0
+%     $$
+%     en  $f(x)$ is de limiet hiervan met $x = tn$
+%     $$
+%         f(x) = \lim_{t \rightarrow \infty}{(1+t)^n f_0 } = f(0) \lim_{n \rightarrow \infty}{ \left(1+\frac{x}{n}\right)^n} = f(0) e^{x} 
+%         % WP Haken groter maken met \left en \right (gefixt)
+%     $$
+% \end{example}
+
+\section{Lineaire differentievergelijkingen}
+Een algemene discussie van differentievergelijkingen valt buiten de opzet van dit werk, waardoor we ons hier beperken tot het lineaire geval.
+In deze sectie zullen we matrixoperatoren en operatorfactorisatie gebruiken om oplossingen van
+differentievergelijkingen te bestuderen en demonstreren we een aantal resultaten met voorbeelden.
+Hiervoor definiëren we nog een aantal begrippen.
+
+\begin{definition}[lineaire differentieoperator]
+    We noemen $\alpha_i\in (\text{End}(G))_\mathbb{Z}[E]$ met $\text{Deg}(\alpha_i)=k$
+    een lineaire differentieoperator van orde/graad $k$.
+\end{definition}
+
+\begin{notation}[polynomen in $E$]
+    We schrijven polynomen in $E$ met Griekse letters.
+\end{notation}
+
+\begin{definition}[(in)homogeen lineaire differentievergelijkingen, homogene/ particuliere oplossingen, forceerterm] %WP differentievergelijkingen is één woord.(gefixt)
+    Een differentievergelijking van $f_i \in (G)_{\mathbb{Z}}$ noemt men lineair van orde $k \in \mathbb{N}$ als en slechts als
+    deze herschreven kan worden in volgende vorm:
+    \begin{align*}
+        (\alpha_i)(f_i)                                                   & = g_i \Leftrightarrow \\
+        (a^0_iE^k + a^1_i E^{k-1} + a^2_i E^{k-2} + ... + a^k_i E^0)(f_i) & = g_i
+    \end{align*}
+
+
+    %WP: ik ben er niet zeker van dat alle a^j_i verschillend moeten zijn van nul; ik kan me best voorstellen dat er een term in de formule ontbreekt, 
+    %en dat het volstaat dat alleen de hoogste ordeterm verschilt van nul.
+
+    %isi: kijk naar de opmerking
+    met
+    \begin{itemize}
+        \item $\alpha_i \in (\text{End}(G))_\mathbb{Z}[E]$ de corresponderende lineaire operator.
+        \item $a^j_i \in (\text{End}(G))_\mathbb{Z}, \forall j$ de coëfficiënten.
+        \item $g_i \in (G)_{\mathbb{Z}}$ de forceerterm.
+    \end{itemize}
+
+    Lineaire differentievergelijkingen worden homogeen genoemd als $g_i = 0$ en anders
+    inhomogeen. Oplossingen voor deze types differentievergelijkingen worden respectievelijk homogeen en particulier genoemd.
+\end{definition}
+
+
+
+\begin{example}[Fibonacci]
+    -De rij van Fibonacci is een lineaire differentie vergelijking van de tweede graad, en voldoet aan $(E^2 -E -1)(f_i) =0.$
+\end{example}
+
+
+
+% ik had hier voor niet de voorwaarde dat de functies optelling moest bewaren
+% \begin{example}[rijen van Hailstone]
+%     De rijen van Hailstone komt voor in de beruchte Collatz conjecture. Deze zijn gedefinieerd op volgende manier:
+%     \begin{align*}
+%         f(n)&= \begin{cases}\frac{n}{2} & \text { als } n \equiv 0(\bmod 2) \\ 3 n+1 & \text { als } n \equiv 1(\bmod 2)\end{cases}\\
+%         a_{i}&= \begin{cases}a_0 & \text { voor } i=0 \\ f\left(a_{i-1}\right) & \text { voor } i>0\end{cases}.
+%     \end{align*}
+%     Voor $i> 0$ geldt dus volgende differentievergelijking:
+%     $$
+%     (E-f)(a_i)=0.
+%     $$
+% \end{example}
+
+% \begin{remark}
+%     In principe kan vorig voorbeeld gedaan worden met alle rijen die gedefinieerd zijn door herhaaldelijke functie evaluaties.    
+% \end{remark}
+
+
+%dit ziet er niet zo overzichtelijk uit mss doe ik daar later iets aan mss
+% mss splits ik dit op
+\begin{theorem}[uniciteitvoorwaarde]
+    \label{uniciteitvoorwaarde}
+    Gegeven een lineaire differentievergelijking van orde $k$ met $a^j_i$ als coëfficiënten van $f_i$ waar dat
+    $\forall i< l+1 , i> l+k:a_i^0,a_i^k \in \text{Aut}(A)$ en gegeven $k$
+    opeenvolgende waarden van $f_i$ $(f_j)_{j=l+1}^{l+k}$ dan is $f_i$ uniek bepaald.
+\end{theorem}
+\begin{proof}
+    2 simpele inductie bewijzen voor $(f_j)_{j< l+1}, $ en $(f_j)_{ j> l+k} $.
+\end{proof}
+
+\begin{remark}
+    Deze stelling kunnen we opsplitsen in 2 gevallen.
+    Dit wil zeggen als we alleen geïnteresseerd waren in $(f_j)_{ j> l+k}$, dat enkel
+    $\forall i> l+k:a_i^k \in \text{Aut}(A)$ nodig is voor uniciteit.
+\end{remark}
+
+\begin{definition}[uniciteitvoorwaarde]
+    $\alpha_i \in (\text{End}(G))_\mathbb{Z}[E]$ van graad $k$ voldoet aan de uniciteitvoorwaarde als en
+    slechts als
+    $
+        a_i^0,a_i^k \in (\text{Aut}(G))_{\mathbb{Z}}.
+    $
+    Een differentievergelijking voldoet aan de uniciteitvoorwaarde als de corresponderende lineaire operator
+    dat doet.
+\end{definition}
+
+
+
+\begin{lemma}
+    \label{lemma unciteit voorwaarde}
+    $\alpha_i, \beta_i \in (\text{End}(G))_\mathbb{Z}[E]$ voldoen aan de uniciteitvoorwaarde
+    als en slechts als $\alpha_i\beta_i$ aan de uniciteitvoorwaarde voldoet.
+\end{lemma}
+
+\begin{proof}
+    Verificatie.
+\end{proof}
+
+\begin{definition}[annihilator]
+    $\beta_i \in (\text{End}(G))_\mathbb{Z}[E]$ is een annihilator van $g_i \in (G)_{\mathbb{Z}}$
+    als en slechts als
+    $
+        (\beta_i)(g_i) = 0.
+    $
+\end{definition}
+
+\begin{theorem}
+    \label{annihilator}
+    Als $f_i \in (G)_{\mathbb{Z}}$ voldoet aan een differentievergelijking met een lineaire operator $\alpha_i$
+    die aan de uniciteitvoorwaarde voldoet en een forceerterm die een annihilator $\beta_i$ heeft
+    die ook aan de uniciteitvoorwaarde voldoet dan
+    is $f_i$ uniek bepaald door
+    $
+        (\beta_i\alpha_i)(f_i) = 0
+    $
+    en $\text{Deg}(\beta_i\alpha_i)$ opeenvolgende waardes van $f_i$.
+\end{theorem}
+
+\begin{proof}
+    Uit (\ref{lemma unciteit voorwaarde}) volgt dat $\beta_i\alpha_i$ voldoet aan de uniciteitsvoorwaarde, zodat $f_i$ uniek bepaalt is door $\text{Deg}(\beta_i\alpha_i)$ opeenvolgende waarden van $f_i$
+    (\ref{uniciteitvoorwaarde}).
+\end{proof}
+
+\begin{example}
+    Neem bijvoorbeeld
+    $$
+        (E-1)(f_i) = 2^i , f_0 =0.
+    $$
+    Een annihilator van $2^i$ is $E-2$ , om uniciteit te behouden neem extra beginvoorwaarde $f_1 = 1$ wat te
+    berekenen is uit vorige relatie. Dus het vorig probleem is equivalent met
+    $$
+        (E-2)(E-1)(f_i)= (E^2-3E+2)(f_i) = 2^{i+1}-2^{i+1}=0, f_0 =0, f_1=1.
+    $$
+\end{example}
+
+\begin{definition}[$\prod$]
+    $\prod$ is de product operator gedefinieerd op volgende manier:
+    $$
+        \prod:(\text{Aut}(G))_\mathbb{Z} \rightarrow(\text{Aut}(G))_\mathbb{Z}: f_i \rightarrow s_i
+    $$
+    waardat $s_i$ de unieke oplossing is van
+    \begin{align*}
+        (E-f_i)(s_i) & = 0 \Leftrightarrow \\
+        s_{i+1}      & = f_i s_i
+    \end{align*}
+    met $s_0 = 1$.
+\end{definition}
+
+\begin{remark}
+    Merk op dat bovenstaande vergelijking ook een lineaire differentievergelijking is. $\text{Aut}(G)$
+    is een groep met de uitgebreide optelling uit $G$ en de vermenigvuldiging met $f_i$ kan dan bekeken worden
+    als een element van $\text{Aut}(\text{Aut}(G))$.
+\end{remark}
+
+\begin{remark}
+    Als we hierboven in plaats van de producten de optelling hadden gezet, kwamen we terug uit op de definite van
+    $\Delta^{-1}$.
+\end{remark}
+
+\begin{theorem}[Goed gedefinieerdheid van $\prod$]
+    $\prod$ is goed gedefinieerd en
+    \begin{align*}
+        \prod: & (\text{Aut}(G))_\mathbb{Z} \rightarrow(\text{Aut}(G))_\mathbb{Z}: f_i \rightarrow                      \\
+               & \left\{\begin{aligned}
+                             & \prod_{j=0}^{n-1}{f_{j}}       & = & f_{n-1}f_{n-2}...f_1 f_0           & \text{ als } n > 0 \\
+                             & 1                              &   &                                    & \text{ als } n = 0 \\
+                             & (\prod_{j=n}^{-1}{f_{j}})^{-1} & = & (f_{-1}f_{-2}...f_{n+1}f_{n})^{-1} & \text{ als } n < 0
+                        \end{aligned} \right. .
+    \end{align*}
+\end{theorem}
+
+\begin{proof}
+    Verificatie. Uniciteit volgt uit \ref{uniciteitvoorwaarde},
+    analoog aan goed gedefinieerdheid van $\Delta^{-1}$.
+\end{proof}
+
+\begin{example}
+    $\prod{f} = f^i.$
+\end{example}
+
+\begin{theorem}[variatie op integrerende factor]
+    $
+        \forall a_i,b_i \in (\text{Aut}(G))_\mathbb{Z}, \exists h_i,s_i\in (\text{Aut}(G))_\mathbb{Z}:
+        a_i E + b_i = s_i \Delta h_i.
+    $
+
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        a_i E + b_i & = s_i \Delta h_i        \\
+                    & = s_i(E-1)h_i           \\
+                    & = s_i E h_i -s_i h_i    \\
+                    & = s_i h_{i+1}E -s_i h_i
+    \end{align*}
+    Door nu LL en RL te vergelijken of van elkaar af te trekken
+    is het eenvoudig te zien dat het volgende een voldoende voorwaarde is:
+    $$
+        \left\{\begin{aligned}
+            a_i & = s_i h_{i+1} \\
+            b_i & = -s_i h_i
+        \end{aligned} \right. \quad \Leftrightarrow
+        h_i^{-1} = (-1)^i\prod{\left(b_ia_i^{-1}\right)} h_0^{-1} \text{ en } s_i = - b_i h_i^{-1}.
+    $$
+    Door $h_0=1$ kiezen hebben we een $h_i, s_i$ geconstrueerd die aan de voorwaarde voldoen.
+\end{proof}
+
+% WP: Het is me niet duidelijk wat de stelling hier zegt. 
+%Je begint ook in je bewijs met wat je moet bewijzen. 
+%Ook staat het hier vol produkttekens zonder indices - dit is niet dadelijk duidelijk!
+
+%isi:stelling zegt dat de operator van die vorm anders geschreven kan worden, 
+% het product heeft geen indices omdat het een operator is
+% notatie is inderdaad niet duidelijk maar eenvoudiger
+
+\begin{corollary}
+    \label{oplo1}
+    Als $f_i$ een 1ste orde lineaire differentie vergelijking is, die voldoet aan de uniciteitsvoorwaarde:
+
+    $$
+        (a_i^0E + a_i^1)(f_i) = g_i
+    $$
+    met beginwaarde $f_0$, dan kan $f_i$ formeel geschreven worden als:
+    $$
+        f_i= h_i^{-1} \left( \Delta^{-1} {\left( s_i^{-1} g_i \right)} + f_0 \right)
+    $$
+    met $h_i$ en $s_i$ uit vorige stelling.
+    %WP: Hier staat een somteken zonder indices!
+    %isi: de som heeft geen indices omdat het een operator is
+\end{corollary}
+
+\begin{proof}
+    \begin{align*}
+        (a_i^0E + a_i^1)(f_i)        & = g_i    \Leftrightarrow                                                   \\
+        (s_i \Delta h_i)(f_i)        & =g_i     \Leftrightarrow                                                   \\
+        s_i \Delta (h_i f_i)         & =g_i     \Leftrightarrow                                                   \\
+        \Delta (h_i f_i)             & =s_i^{-1} g_i  \Leftrightarrow                                             \\
+        \Delta^{-1} \Delta (h_i f_i) & = \Delta^{-1}  {\left( s_i^{-1} g_i \right)}               \Leftrightarrow \\
+        (1 - |_0) (h_i f_i)          & = \Delta^{-1}  {\left( s_i^{-1} g_i \right)}               \Leftrightarrow \\
+        h_i f_i                      & = \Delta^{-1}  {\left( s_i^{-1} g_i \right)} + h_0 f_0     \Leftrightarrow \\
+        f_i                          & = h_i^{-1}\left( \Delta^{-1}  {\left( s_i^{-1} g_i \right)} + f_0 \right)
+    \end{align*}
+\end{proof}
+
+\begin{remark}
+    $1$ste orde lineaire operatoren die aan de uniciteitvoorwaarde voldoen hebben dus een soort van inverse.
+\end{remark}
+
+\begin{remark}
+    In het geval dat we ons zouden beperken tot positieve indices, dan hebben we enkel de uniciteitsvoorwaarde nodig in één richting, en vereenvoudigen de definities van
+    $\Delta^{-1}, \prod$.
+\end{remark}
+
+% hier ben ik niet zo zeker van
+% \begin{remark}
+%     Als we enkel geïnteresseerd zouden zijn in waarde van een rij met indexen in
+%     een richting $(f_j)_{j>l}$ dan is het niet voldoende dat enkel $a_i^0$ inverteerbaar is om een
+%     soort gelijke formule te gebruiken.
+%     Een deelse oplossing bestaat door opsplitsen in eindige gevallen wanneer $a_i^1$ niet
+%     inverteerbaar is maar hier gaan we niet verder op in.
+% \end{remark}
+
+% Hier ga ik eigenlijk niet verder op in ...
+% \begin{remark}[inverse   $a_i^0E + a_i^1$]
+%     We kunnen $f_i$ transformeren naar $t_i = f_i - f_0$ zodat $t_0 =0$ en dan kunnen we spreken over de ''inverse''
+%     van  $a_i^0E + a_i^1$. %WP De derde persoon enkelvoud van impliceren is impliceerT, niet impliceerD (gefixt)
+%     dit zou dan $h_i^{-1}\sum s_i^{-1}$ zijn.
+% \end{remark}
+
+\begin{example}
+    In het geval van
+    $$
+        (E -(i+1))(f_i) = (i+1)!
+    $$
+    die enkel voldoet aan de uniciteitsvoorwaarde in 1 richting, dan krijgen we voor $h_i$ en $s_i$:
+    $$
+        h_i = \frac{1}{i!} \text{ en } s_i = (i+1)!
+    $$
+    Wanneer we dit invullen in (\ref{oplo1}), dan krijgen we
+    $$
+        f_i = i! \left( \sum {\left( \frac{(i+1)!}{(i+1)!} \right)} + f_0 \right) = i! i + i! f_0
+    $$
+    hetgeen enkel geldt voor positieve indices.
+\end{example}
+
+% \begin{remark}
+%     Vorig voorbeeld is uitgekozen voor eenvoudige computatie in het algemeen is de oplossing geen
+%     ''mooie'' formule.
+% \end{remark}
+
+\begin{remark}
+    Tot dusver, hebben we nog geen gebruik gemaakt van het feit dat de coëfficiënten van een differentievergelijking
+    de optelling moeten behouden.
+\end{remark}
+
+
+
+
+\begin{definition} [$\text{Opl}(\alpha_i, g_i)$]
+    Defineer voor $\alpha_i \in (\text{End}(G))_\mathbb{Z}[E], g_i \in (G)_{\mathbb{Z}}:$
+    $$
+        \text{Opl}(\alpha_i, g_i)  := \left\{f_i \in (G)_{\mathbb{Z}} | (\alpha_i)(f_i)=g_i \right\}.
+    $$
+\end{definition}
+
+\begin{lemma}
+    \label{centrumlemma}
+    $\forall \alpha_i \in (Z(\text{End}(G)))_\mathbb{Z}[E], \forall g \in (\text{End}(G))_\mathbb{Z}: \alpha_ig = g\alpha_i.$
+\end{lemma}
+
+\begin{proof}
+    $g$ commuteert met $E$ (\ref{constante functie rijen commuteren met E}) en $g$ commuteert met de coëfficiënten van
+    $\alpha_i$ omdat die in het centrum zitten.
+\end{proof}
+
+% de ring van constante rij endomorfismen op $A$ klinkt raar maar ok
+\begin{theorem}[structuur $\text{Opl}(\alpha_i,0)$ ]
+    Als $ \alpha_i \in (Z(\text{End}(A)))_\mathbb{Z}[E]$ dan is $\text{Opl}(\alpha_i,0)$ een links $R$-module
+    met $R \simeq \text{End}(A)$ de ring van constante rij endomorfismen op $A$.
+\end{theorem}
+
+\begin{proof}
+    $\forall x,y \in \text{Opl}(\alpha_i,0), \forall g \in R:$
+    \begin{align*}
+        (\alpha_i)(x+y) & = (\alpha_i)(x) + (\alpha_i)(y) = 0 \Rightarrow x+y \in \text{Opl}(\alpha_i,0)       \\
+        (\alpha_i)(gx)  & = (\alpha_ig)(x) = (g\alpha_i)(x) = g(0)=0 \Rightarrow gx \in \text{Opl}(\alpha_i,0)
+    \end{align*}
+    In de laatste lijn wordt (\ref{centrumlemma}) gebruikt.
+\end{proof}
+
+\begin{corollary}
+    Als $\text{End}(A)$ een lichaam is dan geldt $\forall \alpha_i \in
+        (\text{End}(A))_\mathbb{Z}[E]:\text{Opl}(\alpha_i,0)$ is een vectorruimte.
+\end{corollary}
+
+\begin{theorem}[structuur $\text{Opl}(\alpha_i,g_i)$ ]
+    $\forall \alpha_i \in (\text{End}(A))_\mathbb{Z}[E], \forall g_i \in (A)_{\mathbb{Z}}, \forall f_P \in
+        \text{Opl}(\alpha_i,g_i):$
+    $$
+        \text{Opl}(\alpha_i,g_i) = f_P + \text{Opl}(\alpha_i,0)
+    $$
+\end{theorem}
+
+\begin{proof}
+    Verificatie, analoog aan het resultaat in differentiaalvergelijkingen.
+\end{proof}
+
+
+% dit is een ding uit vorige versies kan mss nog nuttig zijn achter af
+% \begin{corollary}[oplossing linearie differentievergelijkingen met constante coëfficiënten]
+%     Lineaire differentievergelijkingen met constante coëfficiënten oplossen reduceert naar factoriseren
+%     van het operatorpolynoom.
+% \end{corollary}
+
+% \begin{proof}
+%     Alle lineaire differentievergelijkingen met constante coëfficiënten kunnen omgezet worden naar volgende vorm:
+%     $$
+%         Of_i = g_i \text{ met } O \in \mathbb{R}_0[E]
+%     $$
+%     %WP: Ik heb geen idee wat je bedoelt met \mathbb{R}_0[E]
+%     %isi: polynomen in E met coef in \mathbb{R}_0
+%     Aangezien constantes commuteren met $E$ is $\mathbb{R}_0[E] \simeq  \mathbb{R}_0[X]$. Als we hetzelfde resultaat in $\mathbb{C}$
+%     kunnen aantonen volgt het gestelde want dan construeren we een oplossing binnen $\mathbb{C}$ en dit is voldoende want de oplossing
+%     voor een operator in $\mathbb{R}_0[E]$ is altijd binnen $(\mathbb{R})_{\mathbb{Z}}$ zelfs als de formule voor de oplossing
+%     gebruik maakt van $\mathbb{C}$. In $\mathbb{C}$ is het resultaat triviaal want daar factoriseren polynomen in eerste graad polynomen
+%     en voor operatoren van deze vorm kunnen we een inverse construeren wat de inverse van heel de polynoom construeerbaar maakt.
+% \end{proof}
+
+% \begin{remark}
+%     Een andere manier om dit probleem te benaderen is om een gok te doen met parameters en aan te tonen dat de oplossing
+%     compleet is.
+% \end{remark}
+
+
+% concept van reductie van coeficienten uit vorige versies
+% Nu gaan we verder met het idee van het factoriseren van de operator in operatoren
+% die ''geinverteerd'' kunnen worden.
+
+% \begin{lemma}
+%     $E^2 +a_i E +b_i$ factoriseren kan gereduceerd worden naar $E^2 +c_i E - 1$ factoriseren.
+% \end{lemma}
+
+% % WP: Dit is wiskundig niet eens een exact geformuleerde bewering. Wat is ``even moeilijk''?
+% %isi: zal ik anders verwoorden
+% \begin{proof}
+%     \begin{align*}
+%         E^2 +a_i E +b_i & = (E^2 +a_i E +b_i)u_i u^{-1}_i                                            \\
+%                         & = (E^2 u_i +a_i E u_i + u_i b_i)u^{-1}_i                                   \\
+%                         & = (u_{i+2} E^2  +a_i u_{i+1}E  + u_i b_i)u^{-1}_i                          \\
+%                         & = u_{i+2}( E^2  +a_i u_{i+1}u_{i+2}^{-1}E  + u_i u_{i+2}^{-1} b_i)u^{-1}_i
+%     \end{align*}
+%     Kies $u_i$ zodat
+%     $$
+%         u_i u_{i+2}^{-1} b_i = -1 \Leftrightarrow u_{i+2} = -b_i u_i
+%     $$
+%     Waarvoor expliciete oplossingen voor bestaan.
+%     Vervang $a_i u_{i+1}u_{i+2}^{-1}$ met $c_i$ dit geeft
+%     $$
+%         E^2 +a_i E +b_i =u_{i+2}( E^2  + c_iE  -1 )u^{-1}_i
+%     $$
+%     tegenovergestelde richting is triviaal.
+% \end{proof}
+
+% \begin{lemma}
+%     Als $a_i$ en $b_i$ periodiek zijn kan in vorig bewijs $u_i$ zo gekozen worden misschien in $\mathbb{C}$ zodat
+%     $c_i$ ook periodiek zal zijn.
+% \end{lemma}
+% %WP: Wat is periodiek?
+% %isi: moet ik nog fixen
+
+% \begin{proof}
+%     zonder bewijs
+% \end{proof}
+
+
+% \begin{remark}
+%     Deze lemmas zien er willekeurig uit maar zullen later helpen voor een simpeler resultaat. Vanaf nu noemen we
+%     $2$de orde differentieoperatoren van volgende vorm $E^2 +c_i E - 1$ simpel.
+% \end{remark}
+
+% \begin{lemma}
+%     $\sum_{j=0}^{k}a_i^j E^j$ en $E^k + \sum_{j=1}^{k-1}c_i^j E^j + 1$ zijn even moeilijk te factoriseren.
+% \end{lemma}
+
+% \begin{proof}
+%     Analoog aan lemma ...
+% \end{proof}
+
+\subsection{Matrixoperatoren}
+Het plan is om lineaire differentievergelijkingen te transformeren door gebruik te maken van
+matrixoperatoren-identiteiten naar $1$ste orde lineaire differentievergelijkingen in een grotere groep waar
+we een oplossing (\ref{oplo1}) voor hebben. Dit levert een vorm voor de oplossing.
+
+%\cite{elaydi2013introduction}
+
+\begin{theorem}
+    $\forall a_i^0,a_i^1,a_i^2 \in (\text{End}(G))_\mathbb{Z}, \exists b_i^0,b_i^1 \in  (\text{End}(G^2))_\mathbb{Z}:$
+    $$
+        \left[ {
+                    \begin{array}{c}
+                        a_i^0E^2+a_i^1E+a_i^2 \\
+                        0
+                    \end{array} } \right]
+        =
+        \left(
+        b_i^0E+b_i^1\right)
+        \left[ {
+                    \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]
+    $$
+
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        \left[ {
+                    \begin{array}{c}
+                        a_i^0E^2+a_i^1E+a_i^2 \\
+                        0
+                    \end{array} } \right]
+         & =
+        \left(
+        b_i^0E+b_i^1\right)
+        \left[ {
+        \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]                              \\
+         & =
+        b_i^0E \left[ {
+                    \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right] +
+        b_i^1 \left[ {
+        \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]                              \\
+         & =
+        b_i^0 \left[ {
+                    \begin{array}{c}
+                        E^2 \\
+                        E
+                    \end{array} } \right] +
+        b_i^1 \left[ {
+        \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]                              \\
+         & =
+        \left[ {
+                    \begin{array}{cc}
+                        b^0_{i11} & b^0_{i12} \\
+                        b^0_{i21} & b^0_{i22}
+                    \end{array} } \right]
+        \left[ {
+                    \begin{array}{c}
+                        E^2 \\
+                        E
+                    \end{array} } \right]
+        +
+        \left[ {
+                    \begin{array}{cc}
+                        b^1_{i11} & b^1_{i12} \\
+                        b^1_{i21} & b^1_{i22}
+                    \end{array} } \right]
+        \left[ {
+        \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right]                              \\
+         & =
+        \left[ {
+        \begin{array}{c}
+                        b^0_{i11} E^2 + (b^0_{i12}+b^1_{i11}) E +b^1_{i12} \\
+                        b^0_{i21} E^2 + (b^0_{i22}+b^1_{i21}) E +b^1_{i22}
+                    \end{array} } \right] \\
+    \end{align*}
+    Door nu LL en RL te vergelijken of van elkaar af te trekken
+    is het eenvoudig te zien dat het volgende een voldoende voorwaarde is:
+
+    $$\left\{
+        \begin{aligned}
+            a_i^0 & =  b^0_{i11}           \\
+            a_i^1 & =  b^0_{i12}+b^1_{i11} \\
+            a_i^2 & =  b^1_{i12}
+        \end{aligned}
+        \right. \text{ en }
+        \left\{
+        \begin{aligned}
+            0 & =  b^0_{i21}           \\
+            0 & =  b^0_{i22}+b^1_{i21} \\
+            0 & =  b^1_{i22}
+        \end{aligned}
+        \right. .
+    $$
+    Wat volgende oplossingen  heeft:
+    $$
+        b_i^0 = \left[ {
+                    \begin{array}{cc}
+                        a_i^0 & a_i^1 - b_{i11}^1 \\
+                        0     & -b_{i21}^1
+                    \end{array} } \right] \text{ en }
+        b_i^1 = \left[ {
+                    \begin{array}{cc}
+                        b_{i11}^1 & a_i^2 \\
+                        b_{i21}^1 & 0
+                    \end{array} } \right] \text{ met } b_{i11}^1,b_{i21}^1 \in (\text{End}(A))_\mathbb{Z} .
+    $$
+\end{proof}
+
+% toon ik later denk ik in het algemeen aan dit  is enkel om intuitie op te bouwen voor wat er sebiet komt.
+% \begin{remark}
+%     Als $a_i^0 , a_i^2 \in (\text{Aut}(A))_\mathbb{Z}$ dan kan ook $b_i^0 ,b_i^1 \in (\text{Aut}(A^2))_\mathbb{Z}$.
+% \end{remark}
+
+% \begin{proof}
+%     Kies $b_{i11}^1 = 0$  en $b_{i21}^1 = 1$ in vorige formule dan is
+%     $\text{det}( b_i^0),\text{det}( b_i^1) \in (\text{Aut}(A))_\mathbb{Z}
+%         \Rightarrow b_i^0 ,b_i^1 \in (\text{Aut}(A^2))_\mathbb{Z}$
+% \end{proof}
+
+\begin{conjecture}
+    $\forall \alpha_i \in (\text{End}(G))_\mathbb{Z}[E]: \text{Deg}(\alpha_i) = k, \exists \beta_i \in (\text{End}(G^2))_\mathbb{Z}[E]:
+        \text{Deg}(\beta_i) = k-1:$
+
+    $$
+        \left[ {
+                    \begin{array}{c}
+                        \alpha_i \\
+                        0
+                    \end{array} } \right]
+        =
+        \left(
+        \beta_i \right)
+        \left[ {
+                    \begin{array}{c}
+                        E \\
+                        1
+                    \end{array} } \right].
+    $$
+\end{conjecture}
+
+\begin{proof}
+    Analoog aan het vorige bewijs.
+\end{proof}
+
+\begin{definition}[companion operator]
+    De companion operator van  $\alpha_i \in (\text{End}(G))_\mathbb{Z}[E]$ van graad $k$ en
+    coëfficiënten $a^j_i \in(\text{End}(G))_\mathbb{Z} $ is:
+    $$
+        C(\alpha_i) =
+        \left[\begin{array}{ccccc}
+                a_i^0  & a_i^1  & a_i^2  & \cdots & a_i^{k-1} \\
+                0      & -1     & 0      & \cdots & 0         \\
+                0      & 0      & -1     & \cdots & 0         \\
+                \vdots & \vdots & \vdots & \ddots & \vdots    \\
+                0      & 0      & 0      & 0      & -1
+            \end{array}\right]E +
+        \left[
+            \begin{array}{cc}
+                \begin{array}{ccc}
+                    0 & 0 & \cdots
+                \end{array} & a_{i}^{k}              \\
+                I_k                & \begin{array}{c}
+                                         \vdots \\
+                                         0      \\
+                                         0
+                                     \end{array}
+            \end{array} \right].
+    $$
+
+\end{definition}
+
+\begin{remark}
+    In de literatuur heeft dit te maken met de companion matrix van een lineaire differentievergelijking. Deze definitie is
+    om aan (\ref{relatie companion operator}) te voldoen.
+\end{remark}
+
+\begin{example}
+    $$
+        C(E^2-E-(-1)^i) = \left[
+            \begin{array}{cc}
+                1 & -1 \\
+                0 & -1
+            \end{array}
+            \right] E +
+        \left[
+            \begin{array}{cc}
+                0 & (-1)^{i+1} \\
+                1 & 0
+            \end{array}
+            \right]
+    $$
+\end{example}
+
+\begin{theorem}[relatie companion operator]
+    \label{relatie companion operator}
+    $\forall \alpha_i \in (\text{End}(G))_\mathbb{Z}[E]$ van graad k:
+    $$
+        \left[\begin{array}{c}
+                \alpha_{i} \\
+                0          \\
+                \vdots     \\
+                0
+            \end{array}\right]
+        =
+        \left(
+        C(\alpha_i) \right)
+        \left[\begin{array}{c}
+                E^{k-1} \\
+                E^{k-2} \\
+                \vdots  \\
+                1
+            \end{array}\right].
+    $$
+\end{theorem}
+\begin{proof}
+    Verificatie.
+\end{proof}
+
+\begin{lemma}
+    \label{inverteerbare companion}
+    Een lineaire operator voldoet aan de uniciteitvoorwaarde als en slechts
+    als de companion operator aan de uniciteitvoorwaarde voldoet.
+\end{lemma}
+\begin{proof}
+    Bereken de determinanten van de coëfficiënten.
+\end{proof}
+
+
+
+\begin{theorem}
+    \label{compeq}
+    Een differentievergelijking van $k$de orde  van $f_i \in (G)_{\mathbb{Z}}$ kan herschreven
+    worden als een $1$ste orde differentievergelijking voor
+    $\left[\begin{array}{cccc}
+                E^{k-1} &
+                E^{k-2} &
+                \hdots  &
+                1
+            \end{array}\right]^T (f_i) = F_i\in (G^k)_{\mathbb{Z}}$.
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        (\alpha_i)(f_i)            & = g_i    \Leftrightarrow    \\
+        \left[\begin{array}{cccc}
+                      \alpha_{i} &
+                      0          &
+                      \hdots     &
+                      0
+                  \end{array}\right]^T (f_i) & =
+        \left[\begin{array}{cccc}
+                      g_i    &
+                      0      &
+                      \hdots &
+                      0
+                  \end{array}\right]^T = G_i      \Leftrightarrow    \\
+        \left(
+        C(\alpha_i) \right)
+        \left[\begin{array}{cccc}
+                      E^{k-1} &
+                      E^{k-2} &
+                      \hdots  &
+                      1
+                  \end{array}\right]^T(f_i)  & = G_i \Leftrightarrow \\
+        \left(
+        C(\alpha_i) \right) (F_i)  & = G_i
+    \end{align*}
+    Van lijn $2$ naar $3$ wordt (\ref{relatie companion operator}) gebruikt.
+\end{proof}
+
+\begin{corollary}
+    \label{oplok}
+    Een vorm voor van de oplossing van een lineaire differentievergelijking die aan de uniciteitvoorwaarde voldoet.
+\end{corollary}
+
+\begin{proof}
+    Gevolg van (\ref{compeq}),(\ref{inverteerbare companion}) en (\ref{oplo1}).
+\end{proof}
+
+
+% ik wilde eerst f_42 berekenen maar dan werd ik lui
+% ik gebruik in dit voorbeeld een specifieke truk voor periodieke lineaire differentie vergelijkingen
+% waarvoor ik geen tijd zal hebben :( 
+% ik zie dat dit niet perfect is maar ik denk toch beter als geen voorbeeld ...
+\begin{example}
+    We berekenen hier $f_{2}$ met de oplossingsmethode omschreven in (\ref{oplok}) waar dat:
+    $$
+        (E^2-E-(-1)^i)(f_i)=1, f_0 = f_1 = 0.
+    $$
+    Dit zetten we om met (\ref{compeq}) naar:
+    $$
+        \left(
+        \left[
+            \begin{array}{cc}
+                1 & -1 \\
+                0 & -1
+            \end{array}
+            \right] E +
+        \left[
+            \begin{array}{cc}
+                0 & (-1)^{i+1} \\
+                1 & 0
+            \end{array}
+            \right] \right) (F_i) =
+        \left[\begin{array}{c}
+                1 \\
+                0
+            \end{array}\right] = G , F_0 =\left[\begin{array}{c}
+                0 \\
+                0
+            \end{array}\right].
+    $$
+    De coëfficiënten van deze differentievergelijking zijn inverteerbaar vanwege (\ref{inverteerbare companion})
+    daarom kunnen we (\ref{oplo1}) toepassen. Dit geeft het volgende :
+    \begin{align*}
+        \left[\begin{array}{cc}
+                      f_{2} & f_{1}
+                  \end{array} \right]^T
+        =F_{1} & = H_{1}^{-1}\left( \sum_{j=0}^{0}{\left( S_j^{-1} G \right)}  \right) \\
+               & =  H_{1}^{-1} S_0^{-1} G
+    \end{align*}
+
+    met
+    \begin{align*}
+        H_i & = \prod_{j=0}^{i-1}{\left(-\left[
+            \begin{array}{cc}
+                0 & (-1)^{j+1} \\
+                1 & 0
+            \end{array}
+            \right]^{-1}\left[
+            \begin{array}{cc}
+                1 & -1 \\
+                0 & -1
+            \end{array}
+        \right] \right)}                        \\
+            & =
+        \prod_{j=0}^{i-1}{\left(\left[
+            \begin{array}{cc}
+                0        & -1 \\
+                (-1)^{j} & 0
+            \end{array}
+            \right]\left[
+            \begin{array}{cc}
+                1 & -1 \\
+                0 & -1
+            \end{array}
+        \right] \right)}                        \\
+            & =
+        \prod_{j=0}^{i-1}{\left(\left[
+            \begin{array}{cc}
+                0        & 1          \\
+                (-1)^{j} & (-1)^{j+1}
+            \end{array}
+            \right] \right)}
+    \end{align*}
+    zodat voor even indices:
+    \begin{align*}
+        H_{2i} & = \prod_{j=0}^{2i-1}{\left(\left[
+            \begin{array}{cc}
+                0        & 1          \\
+                (-1)^{j} & (-1)^{j+1}
+            \end{array}
+        \right] \right)}                           \\
+               & =
+        \prod_{k=0}^{i-1}{\left(\left[
+            \begin{array}{cc}
+                0  & 1 \\
+                -1 & 1
+            \end{array}
+            \right]\left[
+            \begin{array}{cc}
+                0 & 1  \\
+                1 & -1
+            \end{array}
+        \right] \right)}                           \\
+               & =
+        \left[
+            \begin{array}{cc}
+                1 & -1 \\
+                1 & -2
+            \end{array} \right]^{i}
+    \end{align*}
+    en hier uit kunnen de waarden van de oneven indexen gehaald worden
+    $$
+        H_{2i+1}  =
+        \left[
+            \begin{array}{cc}
+                0 & 1  \\
+                1 & -1
+            \end{array}
+            \right]
+        \left[
+            \begin{array}{cc}
+                1 & -1 \\
+                1 & -2
+            \end{array} \right]^{i}
+    $$
+    En $S^{-1}_i$ halen we uit $H_i$:
+    \begin{align*}
+        S^{-1}_{2i}   & = - \left[
+            \begin{array}{cc}
+                1 & -1 \\
+                1 & -2
+            \end{array} \right]^{i}
+        \left[
+        \begin{array}{cc}
+                0  & 1 \\
+                -1 & 0
+            \end{array} \right]        \\
+        S^{-1}_{2i+1} & =
+        -\left[
+            \begin{array}{cc}
+                0 & 1  \\
+                1 & -1
+            \end{array}
+            \right]
+        \left[
+            \begin{array}{cc}
+                1 & -1 \\
+                1 & -2
+            \end{array} \right]^{i}
+        \left[
+            \begin{array}{cc}
+                0  & 1 \\
+                -1 & 0
+            \end{array} \right].
+    \end{align*}
+    Als we hiermee $H_1^{-1}$ en $S_0^{-1}$ uitreken en invullen krijgen we
+    $$
+        F_1 =
+        -\left[ \begin{array}{cc}
+                -1 & 1 \\
+                -1 & 0
+            \end{array}\right]
+        \left[ \begin{array}{cc}
+                0  & 1 \\
+                -1 & 0
+            \end{array}\right]
+        \left[ \begin{array}{c}
+                1 \\
+                0
+            \end{array}\right]=
+        \left[ \begin{array}{c}
+                1 \\
+                0
+            \end{array}\right].
+    $$
+    Wat wil zeggen dat $f_2 = 1$ wat overeenkomt door gewoon de recursierelatie met $i=0$ te gebruiken.
+\end{example}
+
+% \begin{remark}
+%     In vorig voorbeeld is het duidelijk eenvoudiger om de recursierelatie zelf te gebruiken.
+% \end{remark}
+
+\begin{remark}
+    Met (\ref{annihilator}) zouden we nog een andere vorm kunnen maken waar $\Delta^{-1}$ wegvalt door de forceerterm weg te annihileren.
+\end{remark}
+%  Deze vorm is nuttig voor parallele computaties. maar daarvoor heb ik geen tijd voor :(
+
+\subsection{Operatorfactorisatie}
+Het plan is om hogere orde lineaire operatoren te proberen te factoriseren in $1$ste orde lineaire operatoren.
+We doen dit eerst voor $2$de orde lineaire operatoren.
+We tonen aan dat factoriseren equivalent is met het oplossen van een non-lineaire differentievergelijking.
+Als deze geen oplossing heeft, lossen we dit op door de groep groter te maken.
+
+
+\begin{theorem}[vorm oplossing gefactoriseerde lineaire operator]
+    Voor een differentievergelijking die een lineaire operator heeft die aan de uniciteit voorwaarde doet en
+    die te schrijven is als een product van $1$ste orde lineaire operatoren kunnen
+    we een vorm van de oplossing maken.
+\end{theorem}
+
+\begin{proof}
+    We gaan dit bewijzen via inductie.\\
+    Basis geval: deze stelling voor $1$ste orde differentievergelijkingen, zie (\ref{oplo1}).\\
+    Inductie hypothese: deze stelling voor $k-1$de orde differentievergelijkingen.\\
+    Inductie stap: deze stelling voor $k$de orde differentievergelijkingen:\\
+    $\forall a_i , b_i \in (\text{Aut}(G))_\mathbb{Z},\alpha_i \in (\text{End}(G))_\mathbb{Z}[E]$ van orde $k-1$:
+    $$
+        (a_iE+b_i)(\alpha_i)(f_i)= g_i.
+    $$
+    Substitueer $h_i=(\alpha_i)(f_i)$ waarvoor we dankzij de inductie hypothese een vorm van de oplossing kunnen maken. Dit geeft:
+    $$
+        (a_iE+b_i)(h_i)= g_i.
+    $$
+    Hiervoor hebben we ook een vorm van de oplossing.
+\end{proof}
+
+\begin{theorem}
+    \label{gereduceerd factoriseren}
+    $\forall a_i^0,a_i^2 \in (\text{Aut}(G))_{\mathbb{Z}},\forall a_i^1 \in (\text{End}(G))_{\mathbb{Z}},
+        \exists u_i^j, v_i^j \in (\text{Aut}(G))_{\mathbb{Z}}, \exists c_i \in (\text{End}(G))_{\mathbb{Z}}:$
+    $$
+        a_{i}^{0} E^{2}+a_{i}^{1} E+a_i^{2} = v_i \left( E^2 + c_i -1 \right) u_i.
+    $$
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        a_{i}^{0} E^{2}+a_{i}^{1} E+a_i^{2} & = v_i \left( E^2 + c_i -1 \right) u_i        \\
+                                            & = v_iu_{i+1}E^2 + v_ib_i u_{i+1}E - v_i u_i.
+    \end{align*}
+    Door nu LL en RL te vergelijken of van elkaar af te trekken
+    is het eenvoudig te zien dat het volgende een voldoende voorwaarde is:
+    $$
+        \left\{\begin{aligned}
+            a_i^0 & =v_iu_{i+1}      \\
+            a_i^1 & =v_i c_i u_{i+1} \\
+            a_i^2 & = -v_iu_i
+        \end{aligned} \right.
+        \Leftarrow
+        \left\{\begin{aligned}
+            u_i^{-1} & = (-1)^i \prod{(a_i^0)^{-1} a_i^2} \\
+            v_i      & = -a_i^2 u_i^{-1}                  \\
+            c_i      & =v_i^{-1} a_i^1 u_{i+1}^{-1}
+        \end{aligned} \right. .
+    $$
+\end{proof}
+
+\begin{remark}
+    Dit kan ook gedaan worden voor hogere ordes. Dit zorgt ervoor dat we enkel $E^k + \sum_{j=1}^{k-1}c_i^j E^j + 1$ hoeven te factoriseren.
+\end{remark}
+%orde 2 beginnen voor intuitie
+\begin{theorem}[equivalente voorwaarde $2$de orde factorisatie]
+    \label{connectie ricatti}
+    $\forall c_i \in (\text{End}(G))_{\mathbb{Z}}, \forall H \geq G, \forall n_i \in (\text{Aut}(H))_{\mathbb{Z}}:$
+    $$
+        E^2 +c_i E -1 = (E - n_i^{-1})(E + n_i) \Leftrightarrow n_{i+1} = c_i + n_i^{-1}.
+    $$
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        E^2 +c_i E -1 & = (E - n_i^{-1})(E + n_i)                         \\
+                      & = E^2 + E n_i - n_i^{-1} E -1                     \\
+                      & = E^2 + (n_{i+1} - n_i^{-1}) E -1 \Leftrightarrow \\
+        c_i E         & = (n_{i+1} - n_i^{-1}) E \Leftrightarrow          \\
+        c_i           & = n_{i+1} - n_i^{-1} \Leftrightarrow              \\
+        n_{i+1}       & = c_i + n_i^{-1}.
+    \end{align*}
+
+\end{proof}
+
+\begin{remark}
+    Merk op dat we geen uniciteit of existentie van deze factorisatie hebben.
+    We hebben enkel een equivalente voorwaarde.
+\end{remark}
+
+\begin{definition}[Ricatti differentievergelijking]
+    Differentievergelijkingen voor $n_i$ van volgende vorm noemen we van het gereduceerd Ricatti type:
+    $$
+        n_{i+1} = c_i + n_i^{-1}.
+    $$
+\end{definition}
+
+\begin{remark}
+    Er kan echter ook een connectie in de omgekeerde zin gemaakt worden, namelijk van de Ricatti differentievergelijking naar een 2de orde lineaire operator.
+\end{remark}
+
+
+\begin{theorem}[connectie Ricatti]
+    $\forall c_i  \in (\text{End}(G))_{\mathbb{Z}}, \forall x_i \in  (\text{Aut}(G))_{\mathbb{Z}}:$
+    $$
+        (E^2 + c_i E -1)(x_i) = 0 \Leftrightarrow n_i := -x_{i+1}x_i^{-1} \text{ en } n_{i+1} = c_i + n_i^{-1}.
+    $$
+\end{theorem}
+
+\begin{proof}
+    Dit was te vermoeden want
+    $(\Leftarrow):$
+    \begin{align*}
+        (E^2 + c_i E -1)(x_i)        & = 0                 \\
+        (E - n_i^{-1})(E + n_i)(x_i) & = 0 \Leftarrow      \\
+        (E + n_i)(x_i)               & = 0 \Leftrightarrow \\
+        n_i                          & = -x_{i+1}x_i^{-1}.
+    \end{align*}
+    $(\Leftrightarrow)$ is verificatie:
+    \begin{align*}
+        0                     & = (E^2 + c_i E -1)(x_i)      \Leftrightarrow \\
+        -x_{i+2}              & =  c_i x_{i+1} - x_i  \Leftrightarrow        \\
+        -x_{i+2} x_{i+1}^{-1} & = c_i - x_i x_{i+1}^{-1}
+    \end{align*}
+    vervang $n_i = - x_i x_{i+1}^{-1}$ en dat toont het gevraagde.
+\end{proof}
+
+\begin{remark}
+    De Ricatti differentievergelijking heeft een connectie met continuerende breuken.
+    In \cite{https://doi.org/10.48550/arxiv.2103.03554} worden continuerende breuken-identiteiten bewezen via het factoriseren van
+    $2$de orde lineaire operator.
+\end{remark}
+
+
+\begin{theorem}
+    In een lichaam kunnen we voor alle $2$de orde operatoren een factorisatie vinden in een groter lichaam.
+    $\forall c_i \in (F)_{\mathbb{Z}}, \exists n_i \in (F(X)\setminus F)_{\mathbb{Z}}:$
+    $$
+        E^2 +c_i E -1 = (E - n_i^{-1})(E + n_i) \Leftrightarrow n_{i+1} = c_i + n_i^{-1}.
+    $$
+\end{theorem}
+
+\begin{proof}
+    Construeer $n_i$ door de voorwaarden $n_{i+1} = c_i + n_i^{-1}$ en
+    $n_0\in (F(X)\setminus F)_{\mathbb{Z}}$.
+    $n_i$ is goed gedefinieerd ($n_i^{-1}$ en $(n_{i} - c_{i-1})^{-1}$ bestaat) want $n_i \in (F(X)\setminus F)_{\mathbb{Z}}$ en
+    dat tonen we aan met inductie.\\
+    Basis geval:
+    $$
+        n_0  \in F(X)\setminus F.
+    $$
+    Inductie hypothese:
+    $$
+        \forall |j|<k: n_j \in F(X)\setminus F.
+    $$
+    Inductie stap:\\
+    Stel dat $n_{k} \in F$ dan:
+    \begin{align*}
+        F \ni n_{k} -c_{k-1} & = n_{k-1}^{-1} \in F(X)\setminus F
+    \end{align*}
+    Wat een contradictie is.\\
+    $$n_{-k} = (n_{-k+1} - c_{k})^{-1} \in F(X)\setminus F \Leftrightarrow n_{-k+1} - c_{k} \in F(X)\setminus F.$$
+    Stel dat $ n_{-k+1} - c_{k} \in F \Leftrightarrow n_{-k+1} \in F$ wat een contradictie is.
+
+
+
+
+
+
+\end{proof}
+
+\begin{example}
+    Neem bijvoorbeeld $E^2+E+1$ welke niet splitst in $\mathbb{F}_2$, maar wel bijvoorbeeld in $\mathbb{F}_2(X)$ en
+    $\frac{\mathbb{F}_2[X]}{(X^2+X+1)}$.In volgende tafel staan voorbeelden van oplossingen van de Ricatti vergelijking.
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|c||c|c|c|c|c|c|c|c|c|c|} \hline
+                                                & ... & $n_{-2}$        & $n_{-1}$        & $n_{0}$ & $n_{1}$         & $n_{2}$         & $n_{3}$ & $n_{4}$         & $n_{5}$         & ... \\ \hline \hline
+            $\frac{\mathbb{F}_2[X]}{(X^2+X+1)}$ & ... & $X$             & $X$             & $X$     & $X$             & $X$             & $X$     & $X$             & $X$             & ... \\ \hline
+            $\mathbb{F}_2(X)$                   & ... & $\frac{1+X}{X}$ & $\frac{1}{1+X}$ & $X$     & $\frac{1+X}{X}$ & $\frac{1}{1+X}$ & $X$     & $\frac{1+X}{X}$ & $\frac{1}{1+X}$ & ... \\ \hline
+        \end{tabular}
+    \end{table}
+    De corresponderende homogene oplossingen  in deze lichaam extensies zijn $\prod{n_i}$.
+    In principe hadden we ook eerst inverteerbare homogene oplossingen kunnen zoeken in deze lichaam extensies.
+\end{example}
+
+
+\begin{conjecture}[equivalente factorisatie voorwaarden]
+    $\forall c_i^j ,d_i^j ,n_i \in (\text{End}(G))_{\mathbb{Z}}:$
+    \begin{align*}
+         & E^k + \sum_{j=1}^{k-1}c_i^j E^j + 1  = (\sum_{j=0}^{k-1}d_i^j E^j)(E+n_i) \Leftrightarrow                      \\
+         & \left\{\begin{aligned}
+                      c^j_i     & = d^j_i n_{i+j}+d^{j-1}_i \text{ met } d^{k-1}_i=1, d^0_i = n^{-1}_i                        \\
+                      n_{i+k-1} & = c^{k-1}_i-n^{-1}_{i+k-2}(c^{k-2}_i-n^{-1}_{i+k-3}(... -n^{-1}_{i+1}(c^{1}_i-n^{-1}_{i})))
+                  \end{aligned} \right.
+    \end{align*}
+
+\end{conjecture}
+
+\begin{proof}
+    Geen bewijs.
+\end{proof}
+
+\begin{remark}
+    Merk op als we $k=2$ kiezen in vorige vergelijkingen dat we dan terug de Ricatti differentievergelijkingen krijgen.
+    $$
+        k =2  : c^1_i - n_{i}^{-1}= n_{i+1}, k=3 : c^2_i - n_{i+1}^{-1} (c^1_i - n_{i}^{-1}) = n_{i+2}
+    $$
+\end{remark}
+
+\begin{conjecture}
+    Er bestaat zoals in het geval $k=2$ ook een connectie terug naar de lineaire operator.
+\end{conjecture}
+
+\begin{proof}
+    Geen bewijs. Via dezelfde substitutie om dezelfde reden.
+\end{proof}
+
+\begin{conjecture}
+    Zoals in het geval $k=2$ kunnen we altijd een oplossing $n_i \in F(X_0,X_1,...,X_{k-1}) \setminus F$ vinden.
+\end{conjecture}
+\begin{proof}
+    Geen bewijs.
+\end{proof}
+
+\begin{example}
+    Neem bijvoorbeeld $E^3+E^2+E+1$ welke niet splitst in $\mathbb{Q}$, maar wel bijvoorbeeld in $\mathbb{Q}(X,Y)$ en
+    $\frac{\mathbb{Q}[X]}{(X^3+X^2+X+1)}$.
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|c||c|c|c|c|c|c|c|c|} \hline
+                                                  & ... & $n_{0}$ & $n_{1}$ & $n_{2}$                   & $n_{3}$                 & $n_{4}$ & $n_{5}$ & ... \\ \hline \hline
+            $\frac{\mathbb{Q}[X]}{(X^3+X^2+X+1)}$ & ... & $X$     & $X$     & $X$                       & $X$                     & $X$     & $X$     & ... \\ \hline
+            $\mathbb{Q}(X,Y)$                     & ... & $X$     & $Y$     & $\frac{X Y - X + 1}{X Y}$ & $\frac{1}{X Y - X + 1}$ & $X$     & $Y$     & ... \\ \hline
+        \end{tabular}
+    \end{table}
+\end{example}
+% ik wilde graag nog een voorbeeld laten zien waar ik ring extensies gebruik om bepaalde operatoren te laten factoriseren
+% maar daar heb ik geen tijd voor.
+
+\begin{remark}
+    In het algemeen zijn oplossingen van de equivalente factorisatie voorwaarden niet zo ''goed gedragend''.
+\end{remark}
+
+\begin{example}
+    Neem nu $E^2 + 42 E - 1$. Daar is een oplossing voor de Ricatti vergelijking in $\mathbb{Q}(X):$
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|c||c|c|c|c|c|c|c|} \hline
+                            & ... & $n_{0}$ & $n_{1}$            & $n_{2}$                        & $n_{3}$                              & $n_{4}$                                   & ... \\ \hline \hline
+            $\mathbb{Q}(X)$ & ... & $X$     & $42 + \frac{1}{X}$ & $\frac{1765 X + 42}{42 X + 1}$ & $\frac{74172 X + 1765}{1765 X + 42}$ & $\frac{3116989 X + 74172}{74172 X + 1765}
+            $               & ...                                                                                                                                                          \\ \hline
+        \end{tabular}
+    \end{table}
+\end{example}
+
+
+
+
+
+% Dingens uit vorige versies
+% %wat ik ook kan doen is factoriseren in commuterende termen
+
+% \begin{theorem}
+%     Lineaire differentieoperatoren factoriseren is even moeilijk als een oplossing
+%     vinden van een aantal lineaire homogene differentievergelijkingen.
+% \end{theorem}
+
+% \begin{proof}
+%     Het is voldoende om $E^k + \sum_{j=1}^{k-1}c_i^j E^j + 1$ te factoriseren voor $k =1$ is het resultaat triviaal.
+%     Voor $k \geq 2$ gok volgende vorm
+%     \begin{align*}
+%         \sum_{j=0}^{k}c_i^j E^j & = (\sum_{j=0}^{k-1}d_i^j E^j)(E+n_i)              \\
+%                                 & = \sum_{j=1}^{k}(d^j_i n_{i+j}+d^{j-1}_i)  E^j +1
+%     \end{align*}
+%     Beide kanten vergelijken geeft:
+%     $$
+%         c^j_i = d^j_i n_{i+j}+d^{j-1}_i \text{ met } d^{k-1}_i=1, d^0_i = n^{-1}_i
+%     $$
+%     Wat een 1ste orde lineaire differentievergelijking met beginvoorwaardes is voor rijen met als onbekende $d^j_i$
+%     waarvoor explciet een unieke oplossing voor te vinden is voor elke $n_i$. Dus het is voldoende om $n_i$ te vinden.
+%     Om $n_i$ te vinden gaan we recursief beginnende van $j=0$, $d^j_i$ substitueren tot en met $j=k-1$. Dit geeft de volgende
+%     $(k-1)$orde differentievergelijking voor $n_i$.
+%     $$
+%         c^{k-1}_i-n^{-1}_{i+k-2}(c^{k-2}_i-n^{-1}_{i+k-3}(... -n^{-1}_{i+1}(c^{1}_i-n^{-1}_{i}))) = n_{i+k-1}
+%     $$
+
+%     $$
+%         c^{k-1}_i+ \sum_{j = 2}^{k} \frac{c_i^{k-j}}{\prod_{l=2}^j -n_{i+k-l}} = n_{i+k-1}
+%     $$
+
+
+%     Hier zijn een aantal voorbeelden:
+%     $$
+%         k =2 \text{ (Riccati)} : c^1_i - \frac{1}{n_{i}}= n_{i+1}, k=3:c^{2}_i - \frac{c^{1}_i - \frac{1}{n_{i}}}{n_{i+1}}= n_{i+2}
+%     $$
+
+%     Hier is wat motivatie voor volgende substitutie. Stel dat we een homogene oplossing $f^H_i$ hebben dan is het niet
+%     moeilijk om te vermoeden dat deze ook een homogene oplossing is van de laatste factor van één van de mogelijke factorisaties:
+%     \begin{align*}
+%         (E + n_i)(f^H_i)    & = 0 \Leftrightarrow        \\
+%         f^H_{i+1}+ n_if^H_i & = 0 \Leftrightarrow        \\
+%         n_i                 & = -\frac{f^H_{i+1}}{f^H_i}
+%     \end{align*}
+%     Dit motiveert $n_i = -\frac{f_{i+1}}{f_i}$ en dit geeft %WP: motiveerT (gefixt)
+
+%     \begin{align*}
+%         c^{k-1}_i+ \sum_{j = 2}^{k} \frac{c_i^{k-j}}{\prod_{l=2}^j \frac{f_{i+k-l+1}}{f_{i+k-l}} } & = -\frac{f_{i+k}}{f_{i+k-1}} \Leftrightarrow  \\
+%         c^{k-1}_i+ \sum_{j = 2}^{k} \frac{f_{i+k-j}c_i^{k-j}}{f_{i+k-1}}                           & = -\frac{f_{i+k}}{f_{i+k-1}}  \Leftrightarrow \\
+%         f_{i+k} + f_{i+k-1} c^{k-1}_i+ \sum_{j = 2}^{k} f_{i+k-j}c_i^{k-j}                         & = 0 \Leftrightarrow                           \\
+%         (\sum_{j=0}^{k}c_i^j E^j)(f_i)                                                             & = 0
+%     \end{align*}
+
+%     Dit toont dat een factor uit $\sum_{j=0}^{k}c_i^j E^j$ factoriseren even moeilijk is als een oplossing vinden van het corrensponderende homogene
+%     differentievergelijking. Dus $\sum_{j=0}^{k}c_i^j E^j$ factoriseren reduceert zich dan naar het reduceren van een lineaire differentieoperator
+%     van een orde lager waar dan inductief hetzelfde argument kan op gebruikt worden.
+
+% \end{proof}
+
+% % ok dit kan ik waarschijnlijk ergens anders zetten maar dat zie ik daarna wel
+% \begin{definition}[lineair onafhankelijk]
+%     $\{a_i^j \in (A_0)_{\mathbb{Z}}\}_{j \in J}$ is $B$-lineair onafhankelijk $\Leftrightarrow$
+%     $$
+%         \forall b_j \in B \leq \text{End}(A): \sum_{j}b_j a_i^j = 0 \Rightarrow   b_j = 0 .
+%     $$
+% \end{definition}
+
+% in vorige versie was volgend lemma in 2 stukken
+% \begin{lemma}
+%     Lineair onafhankelijkheid wordt behouden onder $z_i \in (Z(\text{Aut}(A)))_\mathbb{Z}$.
+% \end{lemma}
+
+% \begin{proof}
+%     Stel  $\{a_i^j \in (A_0)_{\mathbb{Z}}\}_{j \in J}$ is lineair onafhankelijk dan is
+%     $$
+%         \forall b_j \in B: \sum_{j}b_j z_i a_i^j = 0 \Rightarrow z_i \sum_{j}b_j a_i^j = 0
+%         \Rightarrow \sum_{j}b_j a_i^j = 0  \Rightarrow  b_j = 0.
+%     $$
+% \end{proof}
+
+% \begin{lemma}
+%     Lineair onafhankelijkheid wordt behouden onder de $\sum$ operator.
+% \end{lemma}
+
+% \begin{proof}
+%     Stel  $\{a_i^j \in (A_0)_{\mathbb{Z}}\}_{j \in J}$ is lineair onafhankelijk dan is
+
+%     \begin{align*}
+%         \forall b_j,b \in \text{End}(A):0 & = \sum_{j}b_j \sum(a_i^j)             \\
+%                                           & = \sum(\sum_{j}b_j a_i^j) \Rightarrow \\
+%         0                                 & = \Delta \sum(\sum_{j}b_j a_i^j)      \\
+%                                           & = \sum_{j}b_j a_i^j \Rightarrow       \\
+%         b_j                               & = 0
+%     \end{align*}
+% \end{proof}
+
+
+% extra dingens over lineair onafhankelijkheid
+% \begin{lemma}
+%     Als $\{a_i^j \in (A_0)_{\mathbb{Z}}\}_{j \in J}$ $B$-lineair onafhankelijk is dan
+%     is $\{ \Delta^{-1}(z_i a_i^j)\}_{j \in J} \cup \{k\} $
+%     met $k \in (A_0)_{\mathbb{Z}}$ en $z_i \in (Z(B)^*)_\mathbb{Z}$  ook $B$-lineair onafhankelijk.
+% \end{lemma}
+
+% \begin{proof}
+%     \begin{align*}
+%         \forall b_j,b \in B: 0 & = \sum_{j }b_j \Delta^{-1}(z_i a_i^j) + bk \Leftrightarrow     \\
+%         -bk                    & = \Delta^{-1}(\sum_{j }b_j z_i a_i^j)  \Rightarrow             \\
+%         \Delta(-bk)            & = \Delta \Delta^{-1}(\sum_{j }b_j z_i a_i^j)   \Leftrightarrow \\
+%         0                      & = \sum_{j }b_j z_i a_i^j \Leftrightarrow                       \\
+%         0                      & = z_i \sum_{j }b_j  a_i^j\Leftrightarrow                       \\
+%         0                      & = \sum_{j }b_j  a_i^j \Rightarrow                              \\
+%         b_j                    & = 0 \Leftrightarrow                                            \\
+%         0                      & = bk \Leftrightarrow                                           \\
+%         b                      & = 0
+%     \end{align*}
+% \end{proof}
+
+% \begin{theorem}
+%     De oplossingen voor een lineaire homogene $k$ orde differentievergelijking vormen een $k$ dimensionale vectorruimte.
+% \end{theorem}
+
+% \begin{proof}
+%     Standaard inductie bewijs op de orde $k$. Basisgeval $k=0$ is triviaal. Stel dat het gevraagde geldt voor $k <m$. De algemene
+%     vorm voor een lineaire homogene $m$ orde differentievergelijking is:
+%     $$
+%         (\sum_{j=0}^{m}c_i^j E^j)(f_i) = 0
+%     $$
+%     Dankzij stelling ... equivalent met
+%     $$
+%         (\sum_{j=0}^{m-1}d_i^j E^j)(E+n_i)u^{-1}_i(f_i) = 0
+%     $$
+%     Gebruik volgende substitutie:
+%     \begin{align*}
+%         g_i & = (E+n_i)u^{-1}_i(f_i) \Leftrightarrow                                                 \\
+%         f_i & =  \frac{u_i}{h_i} \left( \sum {\left( \frac{g_i}{s_i} \right)} + u^{-1}_0 f_0 \right)
+%     \end{align*}
+%     Dit geeft
+%     $$
+%         (\sum_{j=0}^{m-1}d_i^j E^j)(g_i)) = 0
+%     $$
+%     Dankzij de inductiehypothese is de oplossingruimte van $g_i$ een $(m-1)$ dimensionale vectorruimte. Dankzij vorige lemmas en
+%     terug substitueren volgt het gevraagde.
+% \end{proof}
+
+
+%WP: ik denk toch dat je beter de aanpak van het andere boek (Elaybi) zou volgen, 
+%want deze tekst is bij momenten erg verwarrend. Het is me onder meer ook niet duidelijk 
+%waarom je je indexverzameling per se in \mathbb{Z} wil nemen. Differentievergelijkingen hebben 
+%altijd een aspect dat dit resultaten van metingen zijn in functie van de tijd, en er is niet zoiets als negatieve tijd.
+% Ik denk ook dat de tekst gebaat zou zijn met meer NUMERIEKE voorbeelden, dus concreet differentievergelijkingen met getalletjes in, 
+%waarvan je dan de oplossing berekent. Uiteraard mag je daar voorbeelden nemen waarbij de getalletjes mooi uitkomen.
+% Bijvoorbeeld een differentievergelijking van de gedaante y_{n+2}-4y_{n+1}-5y_n = 5^n of zoiets, 
+%wat een mooi voorbeeld is van een vergelijking waarbij je geen annihilator maar een hyperannihilator moet gebruiken.
+
+
+\newpage
+\printbibliography
+
+\end{document}
