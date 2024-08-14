@@ -1,0 +1,387 @@
+\documentclass[20pt]{beamer}
+\usepackage[]{bookmark}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage[dutch]{babel}
+\usepackage{sansmathaccent}
+\pdfmapfile{+sansmathaccent.map}
+
+\input{preamble_enviroments.tex}
+
+\title{Differentievergelijkingen}
+\author{Isidoor Pinillo Esquivel }
+\usetheme{Madrid}
+\date{juni 2022}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Rijen}
+    \begin{definition}[Rij]
+        Een afbeelding uit $\mathbb{Z}$.
+    \end{definition}
+
+    \begin{notation}[Rij]
+        $(a_i)_{i \in \mathbb{Z}} = (a_i) =a_i$.
+    \end{notation}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Fibonacci 1}
+    \vspace*{-2cm}
+    $$
+        f_0 = 0, f_1 = 1, f_{n+2} = f_{n+1}+f_{n}, \forall n \in \mathbb{Z}.
+    $$
+
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|} \hline
+            ... & $f_{-2}$ & $f_{-1}$ & $f_0$ & $f_1$ & $f_2$ & $f_3$ & $f_4$ & $f_5$ & $f_6$ & ... \\ \hline
+            ... & $-1$     & $1$      & $0$   & $1$   & $1$   & $2$   & $3$   & $5$   & $8$   & ... \\ \hline
+        \end{tabular}
+    \end{table}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Operatoren}
+    \begin{definition}[$E , \Delta $]
+        \vspace*{-0.5cm}
+        % L is de lagg operator, E is de shift operator, $\Delta$ en $\nabla$ zijn differentieoperatoren en $|_k$ is evaluatie in $k$ operator
+        \begin{align*}
+            E      & :(G)_{\mathbb{Z}} \rightarrow (G)_{\mathbb{Z}} : (f_i) \rightarrow (f_{i+1})        \\
+            \Delta & :(G)_{\mathbb{Z}} \rightarrow (G)_{\mathbb{Z}} : (f_i) \rightarrow (f_{i+1}-f_{i}).
+        \end{align*}
+    \end{definition}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Fibonacci 2}
+    \vspace*{-2cm}
+
+    \begin{align*}
+        f_{i+2} - f_{i+1} - f_{i} & = 0 \Leftrightarrow \\
+        (E^2-E-1)(f_i)            & =0
+    \end{align*}
+    \pause
+    Lineaire differentievergelijkingen:
+    $$(a^0_iE^k + ... + a^k_i E^0)(f_i) = g_i$$
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Notatie}
+    \begin{notation}
+        \begin{itemize}
+            \item  $(G,+)$ een groep
+            \item  $F$ een lichaam
+            \item  $\text{End}(G)$
+            \item  $\text{Aut}(G)$
+        \end{itemize}
+    \end{notation}
+\end{frame}
+
+\begin{frame}
+    \frametitle{$\text{End}(G),\text{End}(F)$}
+    \begin{theorem}
+        $\text{End}(G)$ is een bijna ring voor de uitgebreide optelling en compositie.
+    \end{theorem}
+    \pause
+    \begin{theorem}
+        $\forall A,B,C \in \text{End}(G): A(B+C) = AB + AC.$
+    \end{theorem}
+    \pause
+    $M_f: F \rightarrow F : x \rightarrow fx, M_f \in End(F).$
+\end{frame}
+
+\begin{frame}
+    \frametitle{Differentievergelijkingen}
+    $\Delta$VG = DifferentieVerGelijking \pause
+    \begin{definition}[$\Delta$VG]
+        $$
+            \Delta\text{VG} \Leftrightarrow (E^2 + c_i E -1)(f_i) = g_i
+        $$
+        met $g_i \in (G)_{\mathbb{Z}}$ de forceerterm en $c_i \in (\text{End}(G))_{\mathbb{Z}}.$
+    \end{definition}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Uniciteit 1}
+    \vspace*{-0.3cm}
+    \begin{theorem}[uniciteitsvoorwaarde]
+        Als $\Delta$VG en gegeven $f_l,f_{l+1}$ dan is $f_i$ uniek bepaald.
+    \end{theorem}
+    \pause
+    \begin{proof}
+        Inductie en $\Delta$VG
+        \vspace*{-0.5cm}
+        $$ \Leftrightarrow  \left\{\begin{aligned}
+                f_{i+2} & = g_i - c_i f_{i+1} +f_i     \\
+                f_{i}   & = f_{i+2} + c_i f_{i+1} -g_i
+            \end{aligned} \right. .$$
+        \vspace*{-1.15cm}
+    \end{proof}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Uniciteit 2}
+    Algemeen geval ... \pause \\
+    $1$ste orde geval:
+    $$ (a_iE + b_i) \text{ met } a_i,b_i \in (\text{Aut}(G))_{\mathbb{Z}}$$\pause
+    $(a_iE + b_i) \leftarrow$ \small{$1$ste orde lineaire operator} \pause
+    \begin{theorem}[\small{Variatie op integrerende factor}]
+        \vspace*{-0.75cm}
+        $$ \exists s_i,h_i \in (\text{Aut}(G))_{\mathbb{Z}} :  a_iE + b_i = s_i\Delta h_i.$$
+    \end{theorem}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Integrerende factor}
+    Bewijs:\\
+    \vspace*{-0.7cm}
+    \only<1-4>{
+        \vspace*{-0.318cm}
+        \begin{align*}
+            \action<1-4>{ a_iE + b_i & =s_i\Delta h_i \\}
+            \action<2-4>{            & = s_i(E-1) h_i \\}
+            \action<3-4>{            & = s_iEh_i - s_i h_i \\}
+            \action<4-4>{            & = s_ih_{i+1}E - s_i h_i}
+        \end{align*}
+        \vspace{1.5cm}
+    }
+
+    \only<5->{
+    \action<5->{
+    $$
+        a_iE + b_i =s_ih_{i+1}E - s_i h_i
+    $$
+    }
+    \action<6->{
+        \vspace*{-0.3cm}
+        $$
+            \Leftarrow \left\{ \begin{aligned}
+                a_i & = s_i h_{i+1} \\
+                b_i & = -s_i h_i
+            \end{aligned} \right.
+        $$
+    }
+    \action<7->{
+        $$
+            \Leftrightarrow
+            \left\{ \begin{aligned}
+                h_i^{-1} & = (-1)^i\prod{\left(b_ia_i^{-1}\right)} h_0^{-1} \\
+                s_i      & = - b_i h_i^{-1}
+            \end{aligned} \right.
+        $$
+    }
+    }
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Technieken voor $\Delta$VG}
+    \begin{itemize}
+        \item Companion matrix (geen tijd voor)
+        \item Operatorfactorisatie
+    \end{itemize}
+    \pause
+    Operatorfactorisatie:
+    $$
+        E^2 + c_i E -1 = (E-n_i^{-1})(E+n_i)
+    $$
+\end{frame}
+
+
+% \begin{frame}
+%     \frametitle{Vragen? 1}
+%     \begin{itemize}
+%         \item Definities
+%         \item Notatie
+%         \item Uniciteitsvoorwaarde
+%         \item Integrerende factor
+%         \item ...
+%     \end{itemize}
+
+% \end{frame}
+
+
+\begin{frame}
+    \frametitle{Operatorfactorisatie 1}
+    \begin{theorem}[\small{Equivalente voorwaarde}]
+        \vspace*{-0.5cm}
+        \begin{align*}
+            E^2 +c_i E -1 & = (E - n_i^{-1})(E + n_i) \Leftrightarrow \\
+            n_{i+1}       & = c_i + n_i^{-1}.
+        \end{align*}
+    \end{theorem}
+    \pause
+    \begin{definition}[Ricatti $\Delta$VG]
+        $$
+            n_{i+1} = c_i + n_i^{-1}.
+        $$
+    \end{definition}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Operatorfactorisatie 2}
+    $L/F$ een lichaamextensie en $y \in F$ \pause
+    \begin{definition}[Ricatti transformatie]
+        \vspace*{-0.85cm}
+        \begin{align*}
+            R_y: L-F \rightarrow L-F: x      & \rightarrow y + x^{-1}  \\
+            R^{-1}_y: L-F \rightarrow L-F: x & \rightarrow (x-y)^{-1}.
+        \end{align*}
+    \end{definition}
+    \pause
+    \begin{conjecture}[Ricatti groep]
+        $R_{L/F}=\langle R_y | y \in F\rangle$ is een groepactie?
+    \end{conjecture}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Operatorfactorisatie 3}
+    \begin{definition}[$R_{(y_i)}$]
+        \vspace*{-0.5cm}
+        $$
+            R_{(y_i)} = \prod{ R_{y_i}} = R_{y_{i-1}} R_{y_{i-2}} ... R_{y_0}.
+        $$
+    \end{definition} \vspace*{-1cm} \pause
+    $$
+    R_{(y_i)}(x) = y_{i-1}+\frac{1}{y_{i-2}+\frac{1}{...  +\frac{1}{y_{0}+\frac{1}{x}}}}
+    $$
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Operatorfactorisatie 4}
+    
+    Oplossingen Ricatti $\approx R_{(c_i)}(n_0)$ \pause
+    \begin{theorem}[Factorisatie stelling]
+        \small{$\forall c_i \in (F)_{\mathbb{Z}},\forall n_0 \in L-F:$
+        \vspace*{-0.5cm}
+        $$
+            E^2 +c_i E -1 = (E - (R_{(c_i)}(n_0))^{-1})(E + R_{(c_i)}(n_0)).
+        $$}
+    \end{theorem}
+\end{frame}
+
+% \begin{frame}
+%     \frametitle{Vragen? 2}
+%     \begin{itemize}
+%         \item Operatorfactorisatie
+%         \item Ricatti dingens
+%         \item ...
+%     \end{itemize}
+
+% \end{frame}
+
+
+\begin{frame}
+    \frametitle{$\Delta$VG in $\mathbb{F}_4/\mathbb{F}_2$ 1}
+    $\Delta$VG in $\mathbb{F}_2$ met operatorfactorisatie\\ \pause
+    \vspace*{-1cm}
+    \begin{align*}
+        (E^2+1)(f_i)  & =g_i \Leftrightarrow \\
+        (E+1)^2(f_i)  & =g_i \Leftrightarrow \\
+        \Delta^2(f_i) & =g_i \Leftrightarrow
+    \end{align*}\pause
+    \vspace*{-0.5cm}
+    $$
+        f_i   = \sum{\left(\sum{\left(g_i\right)} + f_1 -f_0\right)} +f_0
+    $$
+\end{frame}
+
+\begin{frame}
+    \frametitle{$\Delta$VG in $\mathbb{F}_4/\mathbb{F}_2$ 2}
+    $E^2+E+1$ factoriseert niet in $\mathbb{F}_2[E] \simeq \mathbb{F}_2[X]$ \\ \pause
+    wel in $\mathbb{F}_4[E] \simeq \mathbb{F}_2(\alpha)[E]$ met $\alpha^2 = \alpha^{-1}=\alpha +1$ \pause
+    $$
+        E^2+E+1 = (E + \alpha^{-1})(E+\alpha)
+    $$
+
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{$\Delta$VG in $\mathbb{F}_4/\mathbb{F}_2$ 3}
+    Factorisatie stelling $\rightarrow$ \\ $E^2+c_iE+1$ factoriseert in ($\mathbb{F}_2(\alpha))_{\mathbb{Z}}[E]$ \\ \pause
+    $\mathbb{F}_2(\alpha) - \mathbb{F}_2 = \{\alpha , \alpha^2 \} $ \pause
+    \begin{align*}
+        E^2 & +c_iE+1                                                     \\
+            & = (E - (R_{(c_i)}(\alpha))^{-1})(E + R_{(c_i)}(\alpha))     \\
+            & = (E - (R_{(c_i)}(\alpha^2))^{-1})(E + R_{(c_i)}(\alpha^2))
+    \end{align*}
+\end{frame}
+
+\begin{frame}
+    \frametitle{$\Delta$VG in $\mathbb{F}_4/\mathbb{F}_2$ 4}
+    $R_{(c_i)}(\alpha) =  R_{c_{i-1}}R_{c_{i-2}} ... R_{c_{0}}(\alpha)= ???$ \\ \pause
+    $R_y \text{ inverteerbaar}:\{\alpha , \alpha^2 \} \rightarrow \{\alpha , \alpha^2 \}$ \\ \pause
+    $\Rightarrow R_{\mathbb{F}_4/\mathbb{F}_2}$ abels. \\ \pause
+    Vervolg ... \\ \pause
+    Algemeen: $R_{(c_i)}(n_0), \sum , \prod$
+\end{frame}
+
+% het vervolg is te ingewikkeld maar cool
+% \begin{frame}
+%     \frametitle{$\Delta$VG in $\mathbb{F}_4/\mathbb{F}_2$ 5}
+%     $R_{\mathbb{F}_4/\mathbb{F}_2}$ abels $\Rightarrow R_{(c_i)}(\alpha) = R_0^{t_i}R_1^{u_i}(\alpha)$ \\ \pause
+%     $t_i = \# \{i>j\geq 0|c_j =0\} = \sum{c_i +i},$\\
+%     $u_i = \# \{i>j\geq 0|c_j =1\} = \sum{c_i}$\\ \pause
+%     $R_1= id = 1$ \\
+%     $R_0 = (\alpha,\alpha^2)$\\ \pause
+%     \vspace{-1cm}
+%     \begin{align*}
+%          R_{(c_i)}(\alpha) & = R_0^{t_i}(\alpha)  \\
+%         -(R_{(c_i)}(\alpha))^{-1}     & =R_0^{t_i+1}(\alpha)
+%     \end{align*}
+
+
+% \end{frame}
+
+\begin{frame}
+    \frametitle{$\Delta$VG met constante coef }
+    $E^2+cE-1$ reduciebel (triviaal) \\ \pause
+    $E^2+cE-1$ irreduciebel \pause $\rightarrow$ $L = \frac{F[X]}{(X^2-cX-1)}$ \pause $\Rightarrow$\\ 
+    $R_c(X)=X \Rightarrow R_{(c)}(X)=X$ \\ \pause
+    opl met $\sum,\prod$ ... $g_i$ \\ \pause
+    % Periodieke coef (doenbaar?)
+\end{frame}
+
+% \begin{frame}
+%     \frametitle{Vragen? 3}
+%     \begin{itemize}
+%         \item $\Delta$VG in $\mathbb{F}_4/\mathbb{F}_2$
+%         \item $\Delta$VG met constante coef
+%         \item ...
+%     \end{itemize}
+
+% \end{frame}
+
+% \begin{frame}
+%     \frametitle{Fout 2.2.4}
+%     \small{Fout 2.2.4:\\
+%     $\forall c_i \in (\text{End}(G))_{\mathbb{Z}}, \forall H \geq G, \forall n_i \in (\text{Aut}(H))_{\mathbb{Z}}:$
+%     \vspace*{-0.5cm}
+%     \begin{align*}
+%         E^2 +c_i E -1 & = (E - n_i^{-1})(E + n_i) \Leftrightarrow \\
+%         n_{i+1}       & = c_i + n_i^{-1}.
+%     \end{align*} \pause
+%     $c_i \notin (\text{End}(H))_{\mathbb{Z}}$} \pause $\rightarrow c_i$ uitbreiden 
+% \end{frame}
+
+
+\end{document}
+
